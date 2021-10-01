@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">VPS</string>
+
+    <!-- Error -->
+    <string name="error_api_default">Ошибка сервера</string>
+    <string name="error_api_break_date">Проверьте данные!</string>
+    <string name="error_api_token_error">Ошибка токена</string>
+    <string name="error_no_network">Отсутствует подключение к интернету</string>
+    <string name="hint_access_to_network">Поехали, есть подключение к интернету</string>
+    <string name="error_login_or_password">Неправильный логин или пароль.\nПопробуйте ещё раз.</string>
+    <string name="error_unknown">Что-то пошло не так.\nОбратитесь к разработчику приложения.</string>
 </resources>
