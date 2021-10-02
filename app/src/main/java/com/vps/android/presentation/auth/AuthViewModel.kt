@@ -27,14 +27,15 @@ class AuthViewModel(
         feature.init(viewModelScope, AuthEffectHandler(authInteractor, _events, _messages))
     }
 
-    fun auth(number: String, password: String) {
-        feature.act(AuthFeature.Action.Auth(number, password))
+
+    fun login(pinCode: String) {
+        feature.act(AuthFeature.Action.Auth(pinCode))
     }
-//
-//    fun openRegisterScreen() {
+
+    fun navigateToSettings() {
 //        val dir = AuthFragmentDirections.actionToRegister()
 //        navigate(NavigationCommand.Dir(dir))
-//    }
+    }
 
     fun onSave(outState: Bundle) {
         feature.save(outState)

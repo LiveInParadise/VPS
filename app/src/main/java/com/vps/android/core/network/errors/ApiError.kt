@@ -20,6 +20,5 @@ sealed class ApiError(override val message: String) : IOException(message) {
 }
 
 class ErrorBody(
-    val code: Int? = null,
-    val message: String? = null
+    val error: String? = null
 )

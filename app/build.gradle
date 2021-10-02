@@ -34,11 +34,11 @@ android {
     productFlavors {
         dev {
             applicationIdSuffix ".dev"
-            buildConfigField "String", "BASE_URL", '"https://google.com"'
+            buildConfigField "String", "BASE_URL", '"http://tracking.parduodama.com"'
         }
 
         prod {
-            buildConfigField "String", "BASE_URL", '"https://google.com"'
+            buildConfigField "String", "BASE_URL", '"http://tracking.parduodama.com"'
         }
     }
 
@@ -86,12 +86,10 @@ dependencies {
 
     // Network
     implementation "com.squareup.retrofit2:retrofit:$retofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$retofit_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-    implementation "com.squareup.moshi:moshi-adapters:$moshi_adapters_version"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retofit_version"
+    implementation "com.google.code.gson:gson:$gson_veriosn"
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
@@ -100,6 +98,9 @@ dependencies {
     // AdapterDelegates
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:$adapterdelegates_version"
     implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:$adapterdelegates_version"
+
+    // Android PinView/OtpView
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.2'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

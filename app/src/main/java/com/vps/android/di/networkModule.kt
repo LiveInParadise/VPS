@@ -1,7 +1,6 @@
 package com.vps.android.di
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.google.gson.Gson
 import com.vps.android.BuildConfig
 import com.vps.android.core.network.errors.DefaultErrorMapper
 import com.vps.android.core.network.errors.ErrorMapper
@@ -12,7 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 private const val READ_TIMEOUT = 10_000L
@@ -24,9 +23,9 @@ const val UPLOAD_CONNECT_TIMEOUT = 30_000L
 
 val networkModule = module {
 
-    single { provideMoshi() }
+    single { provideRetrofit(get()) }
 
-    single { provideRetrofit(get(), get()) }
+    single { provideGson() }
 
     single {
         provideOkHttpClient(
@@ -48,7 +47,7 @@ val networkModule = module {
 
     single { NetworkStatusInterceptor(get()) }
 
-    single { ErrorStatusInterceptor(get()) }
+    single { ErrorStatusInterceptor() }
 
     single<ErrorMapper> { DefaultErrorMapper() }
 
@@ -71,17 +70,13 @@ private fun provideOkHttpClient(
         .build()
 
 private fun provideRetrofit(
-    moshi: Moshi,
     client: OkHttpClient
 ): Retrofit {
     return Retrofit.Builder()
         .client(client)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BuildConfig.BASE_URL)
         .build()
 }
 
-private fun provideMoshi(): Moshi =
-    Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+private fun provideGson() = Gson()

@@ -1,5 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
     <style name="Theme.VPS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -12,5 +18,34 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="otpViewStyle">@style/OtpViewStyle</item>
+    </style>
+
+    <style name="OtpViewStyle" parent="@style/OtpWidget.OtpView">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="KeyPadNumStyle">
+        <item name="android:minHeight">60dp</item>
+        <item name="android:minWidth">60dp</item>
+        <item name="android:background">@drawable/bg_keypad_number</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="AppLogoTextStyle">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
+
+    <style name="ErrorTextStyle">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 </resources>

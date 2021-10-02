@@ -1,15 +1,20 @@
 package com.vps.android.interactors.auth.api
 
-import com.vps.android.core.network.base.BaseResponseObj
-import retrofit2.http.GET
+import com.vps.android.interactors.auth.request.PinAuthRequest
+import com.vps.android.interactors.auth.response.AuthBaseResponseObj
+import com.vps.android.interactors.auth.response.TokenObj
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface AuthApi {
 
     /**
-     * Валидация авторизации по JWT
+     * Pin validation
      **/
-    @GET("/auth/check")
-    suspend fun checkAuth(): BaseResponseObj<Boolean>
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body request: PinAuthRequest,
+    ): AuthBaseResponseObj<TokenObj>
 
 //    /**
 //     * Регистрация

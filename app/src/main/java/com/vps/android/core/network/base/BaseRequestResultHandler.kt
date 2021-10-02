@@ -1,51 +1,42 @@
 package com.vps.android.core.network.base
 
-import com.vps.android.core.network.errors.BaseApiError
-import com.vps.android.core.network.errors.ErrorMapper
-import com.vps.android.core.network.errors.NetworkErrorBus
-import com.vps.android.core.network.ext.wrapResult
+import com.google.gson.Gson
 import com.vps.android.core.dispatchers.DispatchersProvider
+import com.vps.android.core.network.errors.BaseApiError
+import com.vps.android.core.network.errors.ErrorBody
+import com.vps.android.core.network.errors.ErrorMapper
+import com.vps.android.core.network.ext.wrapResult
+import com.vps.android.interactors.auth.response.AuthBaseResponseObj
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 abstract class BaseRequestResultHandler(
     protected val dispatchersProvider: DispatchersProvider,
     private val errorMapper: ErrorMapper,
-    private val errorBus: NetworkErrorBus
+    private val gson: Gson,
 ) {
 
     suspend fun <T, D> call(action: suspend () -> T): RequestResult<D>
-            where T : BaseResponseObj<D> =
+            where T : AuthBaseResponseObj<D> =
         withContext(dispatchersProvider.io()) {
-            return@withContext when (val result = wrapResult { action() }) {
+            when (val result = wrapResult { action() }) {
                 is RequestResult.Error -> {
-                    val mappedError = errorMapper.mapError<D, T>(result.error)
-                    errorBus.postEvent(mappedError)
-                    RequestResult.Error(mappedError)
+                    when (val errorData = result.error) {
+                        is HttpException -> {
+                            val error = errorData.response()?.errorBody()?.string()
+                            val errorBody = gson.fromJson(error, ErrorBody::class.java)
+                            RequestResult.Error<D>(Throwable(errorBody.error))
+                        }
+                        else -> {
+                            RequestResult.Error<D>(Throwable(errorData.message))
+                        }
+                    }
                 }
                 is RequestResult.Success -> {
                     val response = result.data
                     when {
-                        response.code != CODE_SUCCESS -> {
-                            val mappedError = errorMapper.mapError<D, T>(
-                                BaseApiError(
-                                    response.code,
-                                    response.error ?: ""
-                                )
-                            )
-                            errorBus.postEvent(mappedError)
-                            RequestResult.Error(mappedError)
-                        }
-                        response.data != null -> RequestResult.Success(response.data)
-                        else -> {
-                            val mappedError = errorMapper.mapError<D, T>(
-                                BaseApiError(
-                                    response.code,
-                                    response.error ?: ""
-                                )
-                            )
-                            errorBus.postEvent(mappedError)
-                            RequestResult.Error(mappedError)
-                        }
+                        response.success != null -> RequestResult.Success(response.success)
+                        else -> RequestResult.Error<D>(Throwable(response.error))
                     }
                 }
             }
@@ -58,7 +49,6 @@ abstract class BaseRequestResultHandler(
             return@withContext when (val result = wrapResult { action() }) {
                 is RequestResult.Error -> {
                     val mappedError = errorMapper.mapError<T, R>(result.error, null)
-                    errorBus.postEvent(mappedError)
                     RequestResult.Error(mappedError)
                 }
                 is RequestResult.Success -> {
@@ -71,7 +61,6 @@ abstract class BaseRequestResultHandler(
                                     response.error ?: ""
                                 )
                             )
-                            errorBus.postEvent(mappedError)
                             RequestResult.Error(mappedError)
                         }
                         response.data != null -> RequestResult.Success(response.data.transform())
@@ -92,7 +81,6 @@ abstract class BaseRequestResultHandler(
             return@withContext when (val result = wrapResult { action() }) {
                 is RequestResult.Error -> {
                     val mappedError = errorMapper.mapError<List<T>, R>(result.error, null)
-                    errorBus.postEvent(mappedError)
                     RequestResult.Error(mappedError)
                 }
                 is RequestResult.Success -> {
@@ -105,7 +93,6 @@ abstract class BaseRequestResultHandler(
                                     response.error ?: ""
                                 )
                             )
-                            errorBus.postEvent(mappedError)
                             RequestResult.Error(mappedError)
                         }
                         response.data != null -> RequestResult.Success(response.data.transform())

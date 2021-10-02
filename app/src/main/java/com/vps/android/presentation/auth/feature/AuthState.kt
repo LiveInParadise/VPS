@@ -8,6 +8,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AuthState(
     val phoneNumber: String = "",
+    val showError: Boolean = false,
+    val isKeypadBlocked: Boolean = false,
+    val errorMessage: String? = null,
     val isLoading: Boolean = false,
     val isUpdated: Boolean = false,
 ) : Parcelable, Reducer<AuthState, AuthFeature.Action, AuthFeature.Effect>, IViewModelState {
@@ -15,7 +18,13 @@ data class AuthState(
     override suspend fun reduce(action: AuthFeature.Action): Pair<AuthState, Set<AuthFeature.Effect>> =
         when (action) {
             is AuthFeature.Action.Auth -> {
-                copy(isLoading = true) to setOf(AuthFeature.Effect.Auth(action.number, action.password))
+                copy(isLoading = true, isKeypadBlocked = true, showError = false) to setOf(AuthFeature.Effect.Auth(action.pinCode))
+            }
+            is AuthFeature.Action.AuthError -> {
+                copy(isLoading = false, isKeypadBlocked = false, showError = true, errorMessage = action.message) to setOf()
+            }
+            is AuthFeature.Action.AuthComplete -> {
+                copy(isLoading = false, isKeypadBlocked = false, showError = false) to setOf(AuthFeature.Effect.DispatchEvent(AuthFeature.Event.AuthSuccess))
             }
 
             is AuthFeature.Action.Error -> {

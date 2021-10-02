@@ -20,13 +20,13 @@ class AuthEffectHandler(
         when (effect) {
             is AuthFeature.Effect.Auth -> {
                 withContext(Dispatchers.IO) {
-                    val result = authInteractor.checkAuth()
+                    val result = authInteractor.login(effect.pinCode)
                     when (result) {
                         is RequestResult.Success -> {
-//                            commit(AuthFeature.Action.AuthComplete(effect.number, result.data))
+                            commit(AuthFeature.Action.AuthComplete)
                         }
                         is RequestResult.Error -> {
-                            commit(AuthFeature.Action.Error(result.error))
+                            commit(AuthFeature.Action.AuthError(result.error.message))
                         }
                     }
                 }
