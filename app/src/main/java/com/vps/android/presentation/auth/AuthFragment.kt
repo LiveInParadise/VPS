@@ -1,6 +1,7 @@
 package com.vps.android.presentation.auth
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import com.vps.android.R
@@ -86,7 +87,7 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
         }
 
         private var isKeypadBlocked: Boolean by RenderProp(false) { isKeypadBlocked ->
-            binding.keypad.isEnabled = !isKeypadBlocked
+            binding.keypad.isKeypadEnabled = !isKeypadBlocked
         }
 
         override fun bind(data: IViewModelState) {

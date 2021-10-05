@@ -5,6 +5,7 @@ import com.vps.android.BuildConfig
 import com.vps.android.core.network.errors.DefaultErrorMapper
 import com.vps.android.core.network.errors.ErrorMapper
 import com.vps.android.core.network.errors.NetworkErrorBus
+import com.vps.android.core.network.interceptors.AuthInterceptor
 import com.vps.android.core.network.interceptors.ErrorStatusInterceptor
 import com.vps.android.core.network.interceptors.NetworkStatusInterceptor
 import okhttp3.OkHttpClient
@@ -31,6 +32,7 @@ val networkModule = module {
         provideOkHttpClient(
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -47,6 +49,8 @@ val networkModule = module {
 
     single { NetworkStatusInterceptor(get()) }
 
+    single { AuthInterceptor(get()) }
+
     single { ErrorStatusInterceptor() }
 
     single<ErrorMapper> { DefaultErrorMapper() }
@@ -58,6 +62,7 @@ private fun provideOkHttpClient(
     loggingInterceptor: HttpLoggingInterceptor,
     networkStatusInterceptor: NetworkStatusInterceptor,
     errorStatusInterceptor: ErrorStatusInterceptor,
+    authInterceptor: AuthInterceptor,
 ): OkHttpClient =
     OkHttpClient.Builder().apply {
         readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
@@ -66,6 +71,7 @@ private fun provideOkHttpClient(
         addInterceptor(loggingInterceptor)
         addInterceptor(networkStatusInterceptor)
         addInterceptor(errorStatusInterceptor)
+        addInterceptor(authInterceptor)
     }
         .build()
 

@@ -6,4 +6,6 @@ import com.vps.android.interactors.auth.response.TokenObj
 interface AuthRepository {
 
     suspend fun login(pinCode: String): RequestResult<TokenObj>
+
+    suspend fun logout(): RequestResult<String>
 }

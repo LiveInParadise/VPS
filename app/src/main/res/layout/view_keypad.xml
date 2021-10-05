@@ -103,13 +103,13 @@
 
     <ImageView
         android:id="@+id/btn_clear"
+        style="@style/ClickableBorderlessBackgroundStyle"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
         android:src="@drawable/ic_back"
         app:layout_constraintBottom_toBottomOf="@id/tv_0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_0" />
+        app:layout_constraintTop_toTopOf="@id/tv_0"
+        app:tint="@color/base_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

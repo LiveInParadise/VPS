@@ -12,7 +12,6 @@ data class AuthState(
     val isKeypadBlocked: Boolean = false,
     val errorMessage: String? = null,
     val isLoading: Boolean = false,
-    val isUpdated: Boolean = false,
 ) : Parcelable, Reducer<AuthState, AuthFeature.Action, AuthFeature.Effect>, IViewModelState {
 
     override suspend fun reduce(action: AuthFeature.Action): Pair<AuthState, Set<AuthFeature.Effect>> =

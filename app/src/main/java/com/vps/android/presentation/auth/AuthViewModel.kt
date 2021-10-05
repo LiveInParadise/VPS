@@ -2,11 +2,13 @@ package com.vps.android.presentation.auth
 
 import android.os.Bundle
 import androidx.lifecycle.viewModelScope
+import com.vps.android.MainNavigationDirections
 import com.vps.android.core.local.PrefManager
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.presentation.auth.feature.AuthEffectHandler
 import com.vps.android.presentation.auth.feature.AuthFeature
 import com.vps.android.presentation.base.BaseViewModel
+import com.vps.android.presentation.base.NavigationCommand
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -33,8 +35,8 @@ class AuthViewModel(
     }
 
     fun navigateToSettings() {
-//        val dir = AuthFragmentDirections.actionToRegister()
-//        navigate(NavigationCommand.Dir(dir))
+        val dir = MainNavigationDirections.actionToMechanismType()
+        navigate(NavigationCommand.Dir(dir))
     }
 
     fun onSave(outState: Bundle) {

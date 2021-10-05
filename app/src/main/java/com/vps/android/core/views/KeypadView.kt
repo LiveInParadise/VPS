@@ -16,6 +16,10 @@ class KeypadView @JvmOverloads constructor(
 
     var onKeypadClicked: (String) -> Unit = {}
     var onClearClicked = {}
+    var isKeypadEnabled: Boolean = true
+        set(value) {
+            setKeypadClickable(value)
+        }
 
     private val root = View.inflate(context, R.layout.view_keypad, this)
     private val key1: TextView = root.findViewById(R.id.tv_1)
@@ -69,5 +73,19 @@ class KeypadView @JvmOverloads constructor(
         btnClear.setOnClickListener {
             onClearClicked.invoke()
         }
+    }
+
+    private fun setKeypadClickable(isEnabled: Boolean) {
+        key1.isEnabled = isEnabled
+        key2.isEnabled = isEnabled
+        key3.isEnabled = isEnabled
+        key4.isEnabled = isEnabled
+        key5.isEnabled = isEnabled
+        key6.isEnabled = isEnabled
+        key7.isEnabled = isEnabled
+        key8.isEnabled = isEnabled
+        key9.isEnabled = isEnabled
+        key0.isEnabled = isEnabled
+        btnClear.isEnabled = isEnabled
     }
 }

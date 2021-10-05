@@ -10,4 +10,6 @@ class AuthInteractor(
 
     suspend fun login(pinCode: String): RequestResult<TokenObj> =
         repository.login(pinCode)
+
+    suspend fun logout() = repository.logout()
 }

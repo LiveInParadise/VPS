@@ -1,7 +1,7 @@
 package com.vps.android.interactors.auth.api
 
+import com.vps.android.core.network.base.BaseResponseObj
 import com.vps.android.interactors.auth.request.PinAuthRequest
-import com.vps.android.interactors.auth.response.AuthBaseResponseObj
 import com.vps.android.interactors.auth.response.TokenObj
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -14,13 +14,12 @@ interface AuthApi {
     @POST("/api/auth/login")
     suspend fun login(
         @Body request: PinAuthRequest,
-    ): AuthBaseResponseObj<TokenObj>
+    ): BaseResponseObj<TokenObj>
 
-//    /**
-//     * Регистрация
-//     **/
-//    @POST("auth/register")
-//    suspend fun auth(
-//        @Body request: ProfileAuthRequest,
-//    ): BaseResponseObj<ProfileAuthResponseObj>
+    /**
+     * Logout
+     **/
+    @POST("/api/auth/logout")
+    suspend fun logout(
+    ): BaseResponseObj<String>
 }

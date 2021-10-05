@@ -2,11 +2,9 @@ package com.vps.android.core.network.base
 
 import com.google.gson.Gson
 import com.vps.android.core.dispatchers.DispatchersProvider
-import com.vps.android.core.network.errors.BaseApiError
 import com.vps.android.core.network.errors.ErrorBody
 import com.vps.android.core.network.errors.ErrorMapper
 import com.vps.android.core.network.ext.wrapResult
-import com.vps.android.interactors.auth.response.AuthBaseResponseObj
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
@@ -17,7 +15,7 @@ abstract class BaseRequestResultHandler(
 ) {
 
     suspend fun <T, D> call(action: suspend () -> T): RequestResult<D>
-            where T : AuthBaseResponseObj<D> =
+            where T : BaseResponseObj<D> =
         withContext(dispatchersProvider.io()) {
             when (val result = wrapResult { action() }) {
                 is RequestResult.Error -> {
@@ -42,6 +40,7 @@ abstract class BaseRequestResultHandler(
             }
         }
 
+    /*
     suspend fun <R, T, D> callAndMap(action: suspend () -> R): RequestResult<D>
             where R : BaseResponseObj<T>,
                   T : Transformable<D> =
@@ -73,35 +72,30 @@ abstract class BaseRequestResultHandler(
                 }
             }
         }
+     */
 
-    suspend fun <R, T, D> callAndMapList(action: suspend () -> R): RequestResult<List<D>>
-            where R : BaseResponseObj<List<T>>,
-                  T : Transformable<D> =
+    suspend fun <T, D> callAndMapList(action: suspend () -> List<T>): RequestResult<List<D>>
+            where T : Transformable<D> =
         withContext(dispatchersProvider.default()) {
             return@withContext when (val result = wrapResult { action() }) {
                 is RequestResult.Error -> {
-                    val mappedError = errorMapper.mapError<List<T>, R>(result.error, null)
-                    RequestResult.Error(mappedError)
+                    RequestResult.Success(listOf())
                 }
                 is RequestResult.Success -> {
-                    val response = result.data
-                    when {
-                        response.code != CODE_SUCCESS -> {
-                            val mappedError = errorMapper.mapError<List<T>, R>(
-                                BaseApiError(
-                                    response.code,
-                                    response.error ?: ""
-                                )
-                            )
-                            RequestResult.Error(mappedError)
-                        }
-                        response.data != null -> RequestResult.Success(response.data.transform())
-                        else -> RequestResult.Error(
-                            errorMapper.mapError<List<T>, R>(
-                                BaseApiError(CODE_ERROR, "")
-                            )
-                        )
-                    }
+                    RequestResult.Success(result.data.transform())
+                }
+            }
+        }
+
+    suspend fun <T, D> callAndMapListBase(action: suspend () -> List<T>): List<D>
+            where T : Transformable<D> =
+        withContext(dispatchersProvider.default()) {
+            return@withContext when (val result = wrapResult { action() }) {
+                is RequestResult.Error -> {
+                    listOf()
+                }
+                is RequestResult.Success -> {
+                    result.data.transform()
                 }
             }
         }

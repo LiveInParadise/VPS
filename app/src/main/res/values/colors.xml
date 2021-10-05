@@ -11,6 +11,10 @@
     <color name="red">#FF0000</color>
     <color name="dark_blue">#2A3E4C</color>
 
+    <color name="base_color">#A0B9BD</color>
+    <color name="service_color">#FFB400</color>
+    <color name="service_button_color">#BB7E13</color>
+
     <color name="keypad_num">@color/white</color>
     <color name="keypad_background">#a0b9bd</color>
     <color name="keypad_stroke">#1C6881</color>

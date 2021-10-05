@@ -46,6 +46,8 @@ abstract class BaseViewModel : ViewModel(), KoinComponent, CoroutineScope {
         navigation.observe(owner, EventObserver { onNavigate(it) })
     }
 
+    open fun logout() {}
+
     // navigation with commands
     open fun navigateBack() {
         navigate(NavigationCommand.Back)

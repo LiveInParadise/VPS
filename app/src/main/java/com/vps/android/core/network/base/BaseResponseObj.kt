@@ -1,7 +1,6 @@
 package com.vps.android.core.network.base
 
 data class BaseResponseObj<T>(
-    val error: String?,
-    val code: Int,
-    val data: T?
+    val error: String? = null,
+    val success: T?
 )

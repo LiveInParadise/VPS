@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -13,9 +14,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.vps.android.R
 import com.vps.android.core.ext.hideKeyboard
 import com.vps.android.presentation.root.MainActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseFragment<T : BaseViewModel>(
     @LayoutRes private val contentLayoutId: Int
@@ -70,6 +71,17 @@ abstract class BaseFragment<T : BaseViewModel>(
                 is ViewGroup -> unsubscribeAdapters(view)
             }
         }
+    }
+
+    fun showLogoutDialog() {
+        AlertDialog.Builder(requireContext()).apply {
+            setMessage(R.string.logout_message)
+            setPositiveButton(R.string.yes) { dialog, _ ->
+                dialog.dismiss()
+                viewModel.logout()
+            }
+            setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+        }.show()
     }
 
     private fun subscribeOnRequestedPermissions(list: List<String>) {

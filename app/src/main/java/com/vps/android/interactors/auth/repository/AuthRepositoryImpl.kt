@@ -28,4 +28,11 @@ class AuthRepositoryImpl(
             }
             return@let response
         }
+
+    override suspend fun logout(): RequestResult<String> =
+        call {
+            val response = api.logout()
+            pref.clearAll()
+            response
+        }
 }

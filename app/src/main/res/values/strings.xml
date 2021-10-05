@@ -11,6 +11,12 @@
     <string name="error_login_or_password">Неправильный логин или пароль.\nПопробуйте ещё раз.</string>
     <string name="error_unknown">Что-то пошло не так.\nОбратитесь к разработчику приложения.</string>
 
+    <!-- Common -->
+    <string name="no_items">No items</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_message">Your really want to logout</string>
+
     <!-- Auth -->
     <string name="auth_code_error">Permission denied or pin incorrect</string>
     <string name="auth_success">Successfully log in</string>
@@ -24,4 +30,9 @@
     <string name="key_8">8</string>
     <string name="key_9">9</string>
     <string name="key_0">0</string>
+
+    <!-- Service -->
+    <string name="service_title">Mechanizmas sugedęs</string>
+    <string name="service_button_stop_service">Sutvarkytas</string>
+
 </resources>
