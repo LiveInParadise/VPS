@@ -1,9 +1,11 @@
 package com.vps.android.presentation.main
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.vps.android.R
 import com.vps.android.core.ext.viewBinding
+import com.vps.android.core.utils.Notify
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentMainBinding
 import com.vps.android.presentation.base.BaseFragment
@@ -43,6 +45,8 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
     }
 
     override fun initObservers() {
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+
         lifecycleScope.launchWhenResumed {
             viewModel.state
                 .onEach { stateBinding.bind(it) }
@@ -59,10 +63,19 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
                 viewModel.toAuthScreen()
             }
             is MainFeature.Event.StartMechanismServiceComplete -> {
+                viewModel.notify(Notify.Text(event.message))
                 viewModel.openServiceScreen()
+            }
+            is MainFeature.Event.Error -> {
+                event.error.message?.let { viewModel.notify(Notify.Text(it)) }
             }
         }
     }
+
+    private val backPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {}
+        }
 
     inner class MainBinding : StateBinding() {
 

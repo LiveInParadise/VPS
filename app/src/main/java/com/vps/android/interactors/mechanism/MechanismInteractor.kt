@@ -13,6 +13,9 @@ class MechanismInteractor(
     suspend fun getMechanismListByType(typeId: Int) =
         repository.getMechanismListByType(typeId)
 
+    suspend fun selectMechanism(mechanismId: Int) =
+        repository.selectMechanism(mechanismId)
+
     suspend fun getCombinedMechanismList() =
         repository.getCombinedMechanismList()
 

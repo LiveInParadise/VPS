@@ -9,6 +9,7 @@ data class MechanismObj(
     val mechanism_type_id: Int,
     val worker_id: Int?,
     val loading_goods: Int,
+    val in_service: Int?,
     val mechanism_type_name: String,
 ) : Transformable<MechanismItem> {
 
@@ -18,6 +19,7 @@ data class MechanismObj(
             name = name,
             workerId = worker_id,
             loadingGoods = loading_goods,
+            inService = in_service ?: 0,
             mechanismTypeId = mechanism_type_id,
             mechanismTypeName = mechanism_type_name
         )

@@ -14,12 +14,25 @@ data class MechanismState(
 
     override suspend fun reduce(action: MechanismFeature.Action): Pair<MechanismState, Set<MechanismFeature.Effect>> =
         when (action) {
-            is MechanismFeature.Action.GetCombinedMechanismList -> {
-                copy(isLoading = true) to setOf(MechanismFeature.Effect.GetCombinedMechanismList)
+            is MechanismFeature.Action.GetMechanismTypeList -> {
+                copy(isLoading = true) to setOf(MechanismFeature.Effect.GetMechanismTypeList(action.typeId))
             }
-            is MechanismFeature.Action.GetCombinedMechanismListComplete -> {
+            is MechanismFeature.Action.GetMechanismTypeListComplete -> {
                 copy(isLoading = false, list = action.list) to setOf()
             }
+
+            is MechanismFeature.Action.SelectMechanism -> {
+                copy() to setOf(MechanismFeature.Effect.SelectMechanism(action.item))
+            }
+            is MechanismFeature.Action.SelectMechanismComplete -> {
+                val event = if (action.item.inService()) {
+                    MechanismFeature.Effect.DispatchEvent(MechanismFeature.Event.MechanismInService)
+                } else {
+                    MechanismFeature.Effect.DispatchEvent(MechanismFeature.Event.MechanismNotInService)
+                }
+                copy() to setOf(event)
+            }
+
             is MechanismFeature.Action.Logout -> {
                 copy() to setOf(MechanismFeature.Effect.Logout)
             }

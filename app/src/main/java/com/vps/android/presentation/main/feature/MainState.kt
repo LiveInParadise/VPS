@@ -25,7 +25,7 @@ data class MainState(
                 copy() to setOf(MainFeature.Effect.StartMechanismService)
             }
             is MainFeature.Action.StartMechanismServiceComplete -> {
-                copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartMechanismServiceComplete))
+                copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartMechanismServiceComplete(action.message)))
             }
 
             is MainFeature.Action.Error -> {

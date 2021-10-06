@@ -38,7 +38,7 @@ class ServiceEffectHandler(
                     val result = mechanismInteractor.stopMechanismService()
                     when (result) {
                         is RequestResult.Success -> {
-                            commit(ServiceFeature.Action.StopMechanismServiceComplete)
+                            commit(ServiceFeature.Action.StopMechanismServiceComplete(result.data))
                         }
                         else -> {
                             commit(ServiceFeature.Action.Error(Throwable(result.toString())))

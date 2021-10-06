@@ -21,7 +21,11 @@
         android:id="@+id/nav_mechanism"
         android:name="com.vps.android.presentation.mechanism.MechanismFragment"
         android:label=""
-        tools:layout="@layout/fragment_mechanism" />
+        tools:layout="@layout/fragment_mechanism">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.mechanism.MechanismSpec" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_main"
@@ -47,7 +51,11 @@
 
     <action
         android:id="@+id/action_to_mechanism"
-        app:destination="@id/nav_mechanism" />
+        app:destination="@id/nav_mechanism">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.mechanism.MechanismSpec" />
+    </action>
 
     <action
         android:id="@+id/action_to_main"

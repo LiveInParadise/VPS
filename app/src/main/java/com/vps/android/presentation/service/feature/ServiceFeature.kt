@@ -12,7 +12,7 @@ class ServiceFeature : BaseFeature<ServiceState, ServiceFeature.Action, ServiceF
         object LogoutComplete : Action()
 
         object StopMechanismService : Action()
-        object StopMechanismServiceComplete : Action()
+        data class StopMechanismServiceComplete(val message: String) : Action()
 
         data class Error(val error: Throwable) : Action()
     }
@@ -29,7 +29,7 @@ class ServiceFeature : BaseFeature<ServiceState, ServiceFeature.Action, ServiceF
     sealed class Event {
         object Logout : Event()
 
-        object StopMechanismServiceComplete : Event()
+        data class StopMechanismServiceComplete(val message: String) : Event()
 
         data class Error(val error: Throwable) : Event()
     }

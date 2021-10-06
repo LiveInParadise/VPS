@@ -3,6 +3,8 @@ package com.vps.android.presentation.mechanism
 import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import com.vps.android.MainNavigationDirections
+import com.vps.android.core.local.PrefManager
+import com.vps.android.domain.mechanism.MechanismItem
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.presentation.base.BaseViewModel
@@ -14,8 +16,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 class MechanismViewModel(
+    private val spec: MechanismSpec,
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
+    private val prefManager: PrefManager,
 ) : BaseViewModel() {
 
     private val feature = MechanismFeature()
@@ -26,12 +30,16 @@ class MechanismViewModel(
     val events: Flow<MechanismFeature.Event> = _events.receiveAsFlow()
 
     init {
-        feature.init(viewModelScope, MechanismEffectHandler(mechanismInteractor, authInteractor, _events, _messages))
+        feature.init(viewModelScope, MechanismEffectHandler(mechanismInteractor, authInteractor, prefManager, _events, _messages))
         getMechanismList()
     }
 
     private fun getMechanismList() {
-        feature.act(MechanismFeature.Action.GetCombinedMechanismList)
+        feature.act(MechanismFeature.Action.GetMechanismTypeList(spec.mechanismTypeId))
+    }
+
+    fun selectMechanism(mechanismItem: MechanismItem) {
+        feature.act(MechanismFeature.Action.SelectMechanism(mechanismItem))
     }
 
     override fun logout() {
@@ -40,6 +48,11 @@ class MechanismViewModel(
 
     fun toAuthScreen() {
         val dir = MainNavigationDirections.actionLogout()
+        navigate(NavigationCommand.Dir(dir))
+    }
+
+    fun openServiceScreen() {
+        val dir = MainNavigationDirections.actionToService()
         navigate(NavigationCommand.Dir(dir))
     }
 

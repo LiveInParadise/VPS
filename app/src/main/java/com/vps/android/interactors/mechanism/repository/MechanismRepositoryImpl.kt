@@ -9,6 +9,7 @@ import com.vps.android.core.network.errors.ErrorMapper
 import com.vps.android.domain.mechanism.MechanismItem
 import com.vps.android.domain.mechanism.MechanismType
 import com.vps.android.interactors.mechanism.api.MechanismApi
+import com.vps.android.interactors.mechanism.request.MechanismSelectRequest
 
 class MechanismRepositoryImpl(
     dispatchersProvider: DispatchersProvider,
@@ -26,6 +27,12 @@ class MechanismRepositoryImpl(
     override suspend fun getMechanismListByType(typeId: Int): List<MechanismItem> =
         callAndMapListBase {
             api.getMechanismListByType(typeId)
+        }
+
+    override suspend fun selectMechanism(mechanismId: Int): RequestResult<MechanismItem> =
+        callAndMapMechanism {
+            val request = MechanismSelectRequest(mechanismId)
+            api.selectMechanism(request)
         }
 
     override suspend fun getCombinedMechanismList(): List<MechanismItem> =

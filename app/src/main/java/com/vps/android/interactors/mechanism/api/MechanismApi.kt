@@ -1,8 +1,11 @@
 package com.vps.android.interactors.mechanism.api
 
 import com.vps.android.core.network.base.BaseResponseObj
+import com.vps.android.interactors.mechanism.request.MechanismSelectRequest
 import com.vps.android.interactors.mechanism.response.MechanismObj
+import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
 import com.vps.android.interactors.mechanism.response.MechanismTypeObj
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -22,6 +25,14 @@ interface MechanismApi {
     suspend fun getMechanismListByType(
         @Query("mechanism_type_id") typeId: Int
     ): List<MechanismObj>
+
+    /**
+     * Select mechanism
+     **/
+    @POST("/api/mechanism/select")
+    suspend fun selectMechanism(
+        @Body request: MechanismSelectRequest,
+    ): MechanismSelectResponse<MechanismObj>
 
     /**
      * Get combined mechanism list

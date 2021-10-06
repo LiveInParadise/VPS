@@ -12,7 +12,7 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
         object LogoutComplete : Action()
 
         object StartMechanismService : Action()
-        object StartMechanismServiceComplete : Action()
+        data class StartMechanismServiceComplete(val message: String) : Action()
 
         data class Error(val error: Throwable) : Action()
     }
@@ -29,7 +29,7 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Event {
         object Logout : Event()
 
-        object StartMechanismServiceComplete : Event()
+        data class StartMechanismServiceComplete(val message: String) : Event()
 
         data class Error(val error: Throwable) : Event()
     }

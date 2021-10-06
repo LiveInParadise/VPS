@@ -44,6 +44,7 @@ abstract class BaseFragment<T : BaseViewModel>(
             ActivityResultContracts.RequestMultiplePermissions(), ::handleResultPermissions
         )
 
+        viewModel.observeNotifications(viewLifecycleOwner) { root.renderNotification(it) }
         viewModel.observeNavigation(viewLifecycleOwner) { root.viewModel.navigate(it) }
         viewModel.observePermissions(viewLifecycleOwner) { subscribeOnRequestedPermissions(it) }
 

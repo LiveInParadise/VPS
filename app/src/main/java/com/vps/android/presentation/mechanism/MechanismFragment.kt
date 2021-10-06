@@ -3,6 +3,7 @@ package com.vps.android.presentation.mechanism
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,11 +25,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MechanismFragment : BaseFragment<MechanismViewModel>(R.layout.fragment_mechanism) {
 
     private val binding by viewBinding(FragmentMechanismBinding::bind)
-    override val viewModel: MechanismViewModel by viewModel()
+    private val args: MechanismFragmentArgs by navArgs()
+
+    override val viewModel: MechanismViewModel by viewModel { parametersOf(args.spec) }
 
     override val stateBinding by lazy { MechanismBinding() }
     private val adapter by lazy { createAdapter() }
@@ -67,8 +71,7 @@ class MechanismFragment : BaseFragment<MechanismViewModel>(R.layout.fragment_mec
     }
 
     private fun onItemClicked(mechanismItem: MechanismItem) {
-        prefManager.userMechanism = mechanismItem
-        viewModel.openMainScreen()
+        viewModel.selectMechanism(mechanismItem)
     }
 
     override fun initObservers() {
@@ -84,6 +87,12 @@ class MechanismFragment : BaseFragment<MechanismViewModel>(R.layout.fragment_mec
 
     private fun handleEvent(event: MechanismFeature.Event) {
         when (event) {
+            is MechanismFeature.Event.MechanismInService -> {
+                viewModel.openServiceScreen()
+            }
+            is MechanismFeature.Event.MechanismNotInService -> {
+                viewModel.openMainScreen()
+            }
             is MechanismFeature.Event.Logout -> {
                 viewModel.toAuthScreen()
             }

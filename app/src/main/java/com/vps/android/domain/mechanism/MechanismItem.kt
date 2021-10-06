@@ -10,9 +10,12 @@ data class MechanismItem(
     val name: String,
     val workerId: Int?,
     val loadingGoods: Int,
+    val inService: Int,
     val mechanismTypeId: Int,
     val mechanismTypeName: String,
 ) : Parcelable, RecyclerViewItem {
 
     override fun getId() = id
+
+    fun inService() = inService == 1
 }

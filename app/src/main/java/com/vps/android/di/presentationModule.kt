@@ -17,7 +17,7 @@ val presentationModule = module {
     viewModel { MainVm() }
     viewModel { AuthViewModel(get(), get()) }
     viewModel { MechanismTypeViewModel(get(), get()) }
-    viewModel { MechanismViewModel(get(), get()) }
+    viewModel { MechanismViewModel(get(), get(), get(), get()) }
     viewModel { MainViewModel(get(), get()) }
     viewModel { ServiceViewModel(get(), get()) }
 }

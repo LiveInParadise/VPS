@@ -38,7 +38,7 @@ class MainEffectHandler(
                     val result = mechanismInteractor.startMechanismService()
                     when (result) {
                         is RequestResult.Success -> {
-                            commit(MainFeature.Action.StartMechanismServiceComplete)
+                            commit(MainFeature.Action.StartMechanismServiceComplete(result.data))
                         }
                         else -> {
                             commit(MainFeature.Action.Error(Throwable(result.toString())))

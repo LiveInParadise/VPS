@@ -10,6 +10,8 @@ interface MechanismRepository {
 
     suspend fun getMechanismListByType(typeId: Int): List<MechanismItem>
 
+    suspend fun selectMechanism(mechanismId: Int): RequestResult<MechanismItem>
+
     suspend fun getCombinedMechanismList(): List<MechanismItem>
 
     suspend fun startMechanismService(): RequestResult<String>

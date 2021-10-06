@@ -9,8 +9,11 @@ class MechanismFeature : BaseFeature<MechanismState, MechanismFeature.Action, Me
     override fun initialEffs(): Set<Effect> = emptySet()
 
     sealed class Action {
-        object GetCombinedMechanismList : Action()
-        data class GetCombinedMechanismListComplete(val list: List<MechanismItem>) : Action()
+        data class GetMechanismTypeList(val typeId: Int) : Action()
+        data class GetMechanismTypeListComplete(val list: List<MechanismItem>) : Action()
+
+        data class SelectMechanism(val item: MechanismItem) : Action()
+        data class SelectMechanismComplete(val item: MechanismItem) : Action()
 
         object Logout : Action()
         object LogoutComplete : Action()
@@ -19,7 +22,8 @@ class MechanismFeature : BaseFeature<MechanismState, MechanismFeature.Action, Me
     }
 
     sealed class Effect {
-        object GetCombinedMechanismList : Effect()
+        data class GetMechanismTypeList(val typeId: Int) : Effect()
+        data class SelectMechanism(val item: MechanismItem) : Effect()
 
         object Logout : Effect()
 
@@ -28,6 +32,8 @@ class MechanismFeature : BaseFeature<MechanismState, MechanismFeature.Action, Me
     }
 
     sealed class Event {
+        object MechanismNotInService : Event()
+        object MechanismInService : Event()
         object Logout : Event()
 
         data class Error(val error: Throwable) : Event()

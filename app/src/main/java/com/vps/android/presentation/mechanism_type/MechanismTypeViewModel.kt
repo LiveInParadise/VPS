@@ -7,6 +7,7 @@ import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.presentation.base.BaseViewModel
 import com.vps.android.presentation.base.NavigationCommand
+import com.vps.android.presentation.mechanism.MechanismSpec
 import com.vps.android.presentation.mechanism_type.feature.MechanismTypeEffectHandler
 import com.vps.android.presentation.mechanism_type.feature.MechanismTypeFeature
 import kotlinx.coroutines.channels.Channel
@@ -43,13 +44,9 @@ class MechanismTypeViewModel(
         navigate(NavigationCommand.Dir(dir))
     }
 
-    fun openMainScreen() {
-        val dir = MainNavigationDirections.actionToMain()
-        navigate(NavigationCommand.Dir(dir))
-    }
-
-    fun openChooseMechanismScreen() {
-        val dir = MainNavigationDirections.actionToMechanism()
+    fun openChooseMechanismScreen(typeId: Int) {
+        val spec = MechanismSpec(typeId)
+        val dir = MainNavigationDirections.actionToMechanism(spec)
         navigate(NavigationCommand.Dir(dir))
     }
 

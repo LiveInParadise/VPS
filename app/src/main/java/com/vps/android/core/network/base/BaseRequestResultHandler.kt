@@ -5,6 +5,7 @@ import com.vps.android.core.dispatchers.DispatchersProvider
 import com.vps.android.core.network.errors.ErrorBody
 import com.vps.android.core.network.errors.ErrorMapper
 import com.vps.android.core.network.ext.wrapResult
+import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
@@ -40,7 +41,6 @@ abstract class BaseRequestResultHandler(
             }
         }
 
-    /*
     suspend fun <R, T, D> callAndMap(action: suspend () -> R): RequestResult<D>
             where R : BaseResponseObj<T>,
                   T : Transformable<D> =
@@ -53,26 +53,31 @@ abstract class BaseRequestResultHandler(
                 is RequestResult.Success -> {
                     val response = result.data
                     when {
-                        response.code != CODE_SUCCESS -> {
-                            val mappedError = errorMapper.mapError<T, R>(
-                                BaseApiError(
-                                    response.code,
-                                    response.error ?: ""
-                                )
-                            )
-                            RequestResult.Error(mappedError)
-                        }
-                        response.data != null -> RequestResult.Success(response.data.transform())
-                        else -> RequestResult.Error(
-                            errorMapper.mapError<T, R>(
-                                BaseApiError(CODE_ERROR, "")
-                            )
-                        )
+                        response.success != null -> RequestResult.Success(response.success.transform())
+                        else -> RequestResult.Error<D>(Throwable(response.error))
                     }
                 }
             }
         }
-     */
+
+    suspend fun <R, T, D> callAndMapMechanism(action: suspend () -> R): RequestResult<D>
+            where R : MechanismSelectResponse<T>,
+                  T : Transformable<D> =
+        withContext(dispatchersProvider.io()) {
+            return@withContext when (val result = wrapResult { action() }) {
+                is RequestResult.Error -> {
+                    val mappedError = errorMapper.mapMechanismError<T, R>(result.error, null)
+                    RequestResult.Error(mappedError)
+                }
+                is RequestResult.Success -> {
+                    val response = result.data
+                    when {
+                        response.mechanism != null -> RequestResult.Success(response.mechanism.transform())
+                        else -> RequestResult.Error<D>(Throwable(response.error))
+                    }
+                }
+            }
+        }
 
     suspend fun <T, D> callAndMapList(action: suspend () -> List<T>): RequestResult<List<D>>
             where T : Transformable<D> =

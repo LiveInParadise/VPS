@@ -1,6 +1,7 @@
 package com.vps.android.presentation.mechanism_type
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -14,7 +15,6 @@ import com.vps.android.core.recycler.BaseDelegationAdapter
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentMechanismTypeBinding
 import com.vps.android.domain.mechanism.MechanismType
-import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.presentation.base.BaseFragment
 import com.vps.android.presentation.base.IViewModelState
 import com.vps.android.presentation.base.StateBinding
@@ -65,17 +65,12 @@ class MechanismTypeFragment : BaseFragment<MechanismTypeViewModel>(R.layout.frag
 
     private fun onItemClicked(mechanismType: MechanismType) {
         prefManager.userMechanismType = mechanismType
-        when (mechanismType.getType()) {
-            MechanismTypeClass.SIMPLE -> {
-                viewModel.openMainScreen()
-            }
-            MechanismTypeClass.COMBINED -> {
-                viewModel.openChooseMechanismScreen()
-            }
-        }
+        viewModel.openChooseMechanismScreen(mechanismType.id)
     }
 
     override fun initObservers() {
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+
         lifecycleScope.launchWhenResumed {
             viewModel.state
                 .onEach { stateBinding.bind(it) }
@@ -114,6 +109,11 @@ class MechanismTypeFragment : BaseFragment<MechanismTypeViewModel>(R.layout.frag
             binding.noItems.visible(true)
         }
     }
+
+    private val backPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {}
+        }
 
     inner class MechanismTypeBinding : StateBinding() {
 

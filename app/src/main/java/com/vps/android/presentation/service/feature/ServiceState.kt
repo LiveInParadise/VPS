@@ -25,7 +25,7 @@ data class ServiceState(
                 copy() to setOf(ServiceFeature.Effect.StopMechanismService)
             }
             is ServiceFeature.Action.StopMechanismServiceComplete -> {
-                copy() to setOf(ServiceFeature.Effect.DispatchEvent(ServiceFeature.Event.StopMechanismServiceComplete))
+                copy() to setOf(ServiceFeature.Effect.DispatchEvent(ServiceFeature.Event.StopMechanismServiceComplete(action.message)))
             }
 
             is ServiceFeature.Action.Error -> {
