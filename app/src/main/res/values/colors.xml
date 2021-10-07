@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#5ebb13</color>
 
     <color name="red">#FF0000</color>
     <color name="dark_blue">#2A3E4C</color>
@@ -14,6 +15,7 @@
     <color name="base_color">#A0B9BD</color>
     <color name="service_color">#FFB400</color>
     <color name="service_button_color">#BB7E13</color>
+    <color name="create_task_button_color">#5ebb13</color>
 
     <color name="keypad_num">@color/white</color>
     <color name="keypad_background">#a0b9bd</color>

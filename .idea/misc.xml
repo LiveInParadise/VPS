@@ -16,14 +16,27 @@
         <entry key="app/src/main/res/drawable/ic_logout.xml" value="0.89296875" />
         <entry key="app/src/main/res/drawable/ic_long_arrow_right.xml" value="0.89296875" />
         <entry key="app/src/main/res/drawable/ic_service.xml" value="0.89296875" />
+        <entry key="app/src/main/res/drawable/selector_multi_select.xml" value="0.89296875" />
+        <entry key="app/src/main/res/drawable/selector_single_select.xml" value="0.54609375" />
+        <entry key="app/src/main/res/drawable/shape_multi_select_filled.xml" value="0.89296875" />
+        <entry key="app/src/main/res/drawable/shape_multi_select_not_filled.xml" value="0.89296875" />
+        <entry key="app/src/main/res/drawable/shape_single_select_filled.xml" value="0.89296875" />
+        <entry key="app/src/main/res/drawable/shape_single_select_not_filled.xml" value="0.89296875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5651041666666666" />
+        <entry key="app/src/main/res/layout/fragment_add_task.xml" value="0.625" />
         <entry key="app/src/main/res/layout/fragment_auth.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.655884995507637" />
         <entry key="app/src/main/res/layout/fragment_mechanism.xml" value="0.86875" />
         <entry key="app/src/main/res/layout/fragment_mechanism_type.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_select_task.xml" value="0.75" />
         <entry key="app/src/main/res/layout/fragment_service.xml" value="0.625" />
         <entry key="app/src/main/res/layout/item_mechanism.xml" value="0.86875" />
         <entry key="app/src/main/res/layout/item_mechanism_type.xml" value="0.86875" />
+        <entry key="app/src/main/res/layout/item_multi_select_task.xml" value="0.86875" />
+        <entry key="app/src/main/res/layout/item_select_task.xml" value="0.86875" />
+        <entry key="app/src/main/res/layout/item_select_task_good.xml" value="0.86875" />
+        <entry key="app/src/main/res/layout/item_select_task_good_title.xml" value="0.86875" />
+        <entry key="app/src/main/res/layout/item_select_task_type.xml" value="0.521875" />
         <entry key="app/src/main/res/layout/view_keypad.xml" value="0.86875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.54609375" />
       </map>

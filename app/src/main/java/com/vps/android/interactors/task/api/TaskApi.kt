@@ -5,6 +5,8 @@ import com.vps.android.interactors.task.request.CreateTaskRequest
 import com.vps.android.interactors.task.request.StartTaskRequest
 import com.vps.android.interactors.task.request.StopTaskRequest
 import com.vps.android.interactors.task.request.UpdateTaskRequest
+import com.vps.android.interactors.task.response.FullGoodItemObj
+import com.vps.android.interactors.task.response.PlaceItemObj
 import com.vps.android.interactors.task.response.TaskInfoObj
 import com.vps.android.interactors.task.response.TaskTypeObj
 import retrofit2.http.Body
@@ -68,4 +70,16 @@ interface TaskApi {
     suspend fun selectMechanism(
         @Path("id") mechanismId: Int,
     ): BaseResponseObj<String>
+
+    /**
+     * Get list of places
+     **/
+    @GET("/api/places")
+    suspend fun getPlacesList(): List<PlaceItemObj>
+
+    /**
+     * Get list of places
+     **/
+    @GET("/api/goods")
+    suspend fun getGoodsList(): List<FullGoodItemObj>
 }

@@ -40,6 +40,10 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
             showServiceDialog()
         }
 
+        binding.btnAddTask.setSafeOnClickListener {
+            viewModel.openCreateTaskScreen()
+        }
+
         binding.btnLogout.setSafeOnClickListener {
             showLogoutDialog()
         }

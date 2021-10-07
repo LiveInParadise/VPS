@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vps.android.R
 import com.vps.android.core.ext.viewBinding
 import com.vps.android.core.ext.visible
-import com.vps.android.core.local.PrefManager
 import com.vps.android.core.recycler.BaseDelegationAdapter
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentMechanismBinding
@@ -23,7 +22,6 @@ import com.vps.android.presentation.mechanism.feature.MechanismFeature
 import com.vps.android.presentation.mechanism.feature.MechanismState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -36,8 +34,6 @@ class MechanismFragment : BaseFragment<MechanismViewModel>(R.layout.fragment_mec
 
     override val stateBinding by lazy { MechanismBinding() }
     private val adapter by lazy { createAdapter() }
-
-    private val prefManager: PrefManager by inject()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_logo"
+            style="@style/AppLogoTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logo_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_back"
+            style="@style/ClickableBorderlessBackgroundStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/base_color" />
+
+        <ImageView
+            android:id="@+id/btn_logout"
+            style="@style/ClickableBorderlessBackgroundStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/base_color"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_task_type"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/divider_toolbar">
+
+        <TextView
+            android:id="@+id/tv_task_type_label"
+            style="@style/AddTaskLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_task_type_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_task_type"
+            style="@style/AddTaskTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_type"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_task_type_label"
+            tools:text="@string/create_task_type_label" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_long_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider_type"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_color"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_task_loading"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/container_task_type">
+
+        <TextView
+            android:id="@+id/tv_task_loading_label"
+            style="@style/AddTaskLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_task_loading_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_task_loading"
+            style="@style/AddTaskTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_loading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_task_loading_label"
+            tools:text="@string/create_task_loading_label" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_long_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider_loading"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_color"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_task_unloading"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/container_task_loading">
+
+        <TextView
+            android:id="@+id/tv_task_unloading_label"
+            style="@style/AddTaskLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_task_unloading_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_task_unloading"
+            style="@style/AddTaskTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_unloading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_task_unloading_label"
+            tools:text="@string/create_task_unloading_label" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_unloading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_long_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider_unloading"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_color"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_task_good"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/container_task_unloading">
+
+        <TextView
+            android:id="@+id/tv_task_good_label"
+            style="@style/AddTaskLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_task_good_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_task_good"
+            style="@style/AddTaskTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_good"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_task_good_label"
+            tools:text="@string/create_task_good_label" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_good"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_long_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider_good"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_color"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_task_tech"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/container_task_good">
+
+        <TextView
+            android:id="@+id/tv_task_tech_label"
+            style="@style/AddTaskLabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_task_tech_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_task_tech"
+            style="@style/AddTaskTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin_double"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            app:layout_constraintEnd_toStartOf="@id/iv_arrow_tech"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_task_tech_label"
+            tools:text="@string/create_task_tech_label" />
+
+        <ImageView
+            android:id="@+id/iv_arrow_tech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin_double"
+            android:src="@drawable/ic_long_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider_tech"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/base_color"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_create_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:paddingHorizontal="80dp"
+        android:paddingVertical="20dp"
+        android:text="@string/create_task_create_button"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:backgroundTint="@color/create_task_button_color"
+        app:cornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

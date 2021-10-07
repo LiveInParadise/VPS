@@ -6,8 +6,10 @@ import com.vps.android.core.local.PrefManager
 import com.vps.android.core.network.base.BaseRequestResultHandler
 import com.vps.android.core.network.base.RequestResult
 import com.vps.android.core.network.errors.ErrorMapper
+import com.vps.android.domain.task.FullGoodItem
+import com.vps.android.domain.task.PlaceItem
 import com.vps.android.domain.task.TaskInfo
-import com.vps.android.domain.task.TaskType
+import com.vps.android.domain.task.TaskTypeItem
 import com.vps.android.interactors.task.api.TaskApi
 import com.vps.android.interactors.task.request.CreateTaskRequest
 import com.vps.android.interactors.task.request.StartTaskRequest
@@ -27,7 +29,7 @@ class TaskRepositoryImpl(
             api.createTask(request)
         }
 
-    override suspend fun getTaskTypesList(): List<TaskType> =
+    override suspend fun getTaskTypesList(): List<TaskTypeItem> =
         callAndMapListBase {
             api.getTaskTypesList()
         }
@@ -55,5 +57,15 @@ class TaskRepositoryImpl(
     override suspend fun selectMechanism(mechanismId: Int): RequestResult<String> =
         call {
             api.selectMechanism(mechanismId)
+        }
+
+    override suspend fun getPlacesList(): List<PlaceItem> =
+        callAndMapListBase {
+            api.getPlacesList()
+        }
+
+    override suspend fun getGoodsList(): List<FullGoodItem> =
+        callAndMapListBase {
+            api.getGoodsList()
         }
 }

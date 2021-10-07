@@ -9,6 +9,7 @@ import com.vps.android.presentation.base.BaseViewModel
 import com.vps.android.presentation.base.NavigationCommand
 import com.vps.android.presentation.main.feature.MainEffectHandler
 import com.vps.android.presentation.main.feature.MainFeature
+import com.vps.android.presentation.task.AddTaskSpec
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -44,6 +45,12 @@ class MainViewModel(
 
     fun openServiceScreen() {
         val dir = MainNavigationDirections.actionToService()
+        navigate(NavigationCommand.Dir(dir))
+    }
+
+    fun openCreateTaskScreen() {
+        val spec = AddTaskSpec()
+        val dir = MainNavigationDirections.actionToAddTask(spec)
         navigate(NavigationCommand.Dir(dir))
     }
 

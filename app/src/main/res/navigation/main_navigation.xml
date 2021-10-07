@@ -39,6 +39,28 @@
         android:label=""
         tools:layout="@layout/fragment_service" />
 
+    <fragment
+        android:id="@+id/nav_add_task"
+        android:name="com.vps.android.presentation.task.AddTaskFragment"
+        android:label=""
+        tools:layout="@layout/fragment_add_task">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.task.AddTaskSpec" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_select_task"
+        android:name="com.vps.android.presentation.select_task.SelectTaskFragment"
+        android:label=""
+        tools:layout="@layout/fragment_select_task">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.select_task.SelectTaskSpec" />
+    </fragment>
+
+
+    <!--  Actions  -->
     <action
         android:id="@+id/action_logout"
         app:destination="@id/main_navigation"
@@ -66,5 +88,21 @@
     <action
         android:id="@+id/action_to_service"
         app:destination="@id/nav_service" />
+
+    <action
+        android:id="@+id/action_to_add_task"
+        app:destination="@id/nav_add_task">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.task.AddTaskSpec" />
+    </action>
+
+    <action
+        android:id="@+id/action_to_select_task"
+        app:destination="@id/nav_select_task">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.select_task.SelectTaskSpec" />
+    </action>
 
 </navigation>

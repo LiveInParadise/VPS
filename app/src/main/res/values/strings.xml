@@ -39,4 +39,15 @@
     <string name="service_title">Mechanizmas sugedęs</string>
     <string name="service_button_stop_service">Sutvarkytas</string>
 
+    <!-- Create Task -->
+    <string name="create_task_type_label">Užduoties tipas</string>
+    <string name="create_task_loading_label">Pakrovimo vieta</string>
+    <string name="create_task_unloading_label">Iškrovimo vieta</string>
+    <string name="create_task_good_label">Krovinys</string>
+    <string name="create_task_tech_label">Technika</string>
+    <string name="create_task_create_button">Sukurti</string>
+
+    <!-- Select Task -->
+    <string name="select_task_save_button">Išsaugoti</string>
+
 </resources>

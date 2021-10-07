@@ -23,4 +23,8 @@ class TaskInteractor(
     suspend fun stopTask(taskId: Int, request: StopTaskRequest) = repository.stopTask(taskId, request)
 
     suspend fun selectMechanism(mechanismId: Int) = repository.selectMechanism(mechanismId)
+
+    suspend fun getPlacesList() = repository.getPlacesList()
+
+    suspend fun getGoodsList() = repository.getGoodsList()
 }

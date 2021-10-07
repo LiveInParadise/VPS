@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_title"
+        style="@style/ClickableBackgroundStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mechanism_item_height"
+        android:clickable="true"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/default_margin_double"
+        android:paddingTop="@dimen/default_margin"
+        android:paddingEnd="@dimen/default_margin_double"
+        android:paddingBottom="@dimen/default_margin"
+        android:textColor="@color/dark_blue"
+        android:textSize="18sp"
+        tools:text="Mechanizmo tipas 1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider_list" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_select_task_good"
+        tools:visibility="visible" />
+
+</LinearLayout>
