@@ -2,6 +2,7 @@ package com.vps.android.presentation.main
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.vps.android.R
 import com.vps.android.core.ext.viewBinding
@@ -36,7 +37,7 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
 
     override fun setupViews() {
         binding.btnService.setSafeOnClickListener {
-            viewModel.startMechanismService()
+            showServiceDialog()
         }
 
         binding.btnLogout.setSafeOnClickListener {
@@ -70,6 +71,17 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
                 event.error.message?.let { viewModel.notify(Notify.Text(it)) }
             }
         }
+    }
+
+    private fun showServiceDialog() {
+        AlertDialog.Builder(requireContext()).apply {
+            setMessage(R.string.dialog_service_message)
+            setPositiveButton(R.string.yes) { dialog, _ ->
+                dialog.dismiss()
+                viewModel.startMechanismService()
+            }
+            setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
+        }.show()
     }
 
     private val backPressedCallback: OnBackPressedCallback =

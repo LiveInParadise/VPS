@@ -1,7 +1,6 @@
 package com.vps.android.core.network.errors
 
 import com.vps.android.core.network.base.BaseResponseObj
-import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
 
 interface ErrorMapper {
 

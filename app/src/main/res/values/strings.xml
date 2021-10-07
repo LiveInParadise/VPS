@@ -13,9 +13,9 @@
 
     <!-- Common -->
     <string name="no_items">No items</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="logout_message">Your really want to logout</string>
+    <string name="yes">Taip</string>
+    <string name="no">Ne</string>
+    <string name="logout_message">Ar tikrai norite atsijungti?</string>
 
     <!-- Auth -->
     <string name="auth_code_error">Permission denied or pin incorrect</string>
@@ -30,6 +30,10 @@
     <string name="key_8">8</string>
     <string name="key_9">9</string>
     <string name="key_0">0</string>
+
+    <!-- Main -->
+    <string name="dialog_service_message">Ar mechanizmas tikrai sugedęs?</string>
+    <string name="main_no_tasks">Užduočių nėra.</string>
 
     <!-- Service -->
     <string name="service_title">Mechanizmas sugedęs</string>
