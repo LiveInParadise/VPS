@@ -46,6 +46,7 @@
     <string name="create_task_good_label">Krovinys</string>
     <string name="create_task_tech_label">Technika</string>
     <string name="create_task_create_button">Sukurti</string>
+    <string name="create_task_fill_error">Please fill all needed fields</string>
 
     <!-- Select Task -->
     <string name="select_task_save_button">Išsaugoti</string>

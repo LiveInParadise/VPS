@@ -8,6 +8,7 @@ import com.vps.android.domain.task.GoodItem
 import com.vps.android.domain.task.PlaceItem
 import com.vps.android.domain.task.TaskTypeItem
 import com.vps.android.interactors.auth.AuthInteractor
+import com.vps.android.interactors.task.TaskInteractor
 import com.vps.android.presentation.base.BaseViewModel
 import com.vps.android.presentation.base.NavigationCommand
 import com.vps.android.presentation.select_task.SelectTaskFragment
@@ -19,7 +20,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 class AddTaskViewModel(
+    private val spec: AddTaskSpec,
     private val authInteractor: AuthInteractor,
+    private val taskInteractor: TaskInteractor,
 ) : BaseViewModel() {
 
     private val feature = AddTaskFeature()
@@ -30,11 +33,20 @@ class AddTaskViewModel(
     val events: Flow<AddTaskFeature.Event> = _events.receiveAsFlow()
 
     init {
-        feature.init(viewModelScope, AddTaskEffectHandler(authInteractor, _events, _messages))
+        feature.init(viewModelScope, AddTaskEffectHandler(authInteractor, taskInteractor, _events, _messages))
+        initData()
+    }
+
+    private fun initData() {
+        feature.act(AddTaskFeature.Action.InitData(spec))
     }
 
     override fun logout() {
         feature.act(AddTaskFeature.Action.Logout)
+    }
+
+    fun checkAndCreateTask() {
+        feature.act(AddTaskFeature.Action.CheckAndCreateTask)
     }
 
     fun onSelectTaskBundle(bundle: Bundle) {
@@ -110,6 +122,11 @@ class AddTaskViewModel(
             taskTechList = state.value.mechanismItemList
         )
         val dir = MainNavigationDirections.actionToSelectTask(spec)
+        navigate(NavigationCommand.Dir(dir))
+    }
+
+    fun openMainScreen() {
+        val dir = MainNavigationDirections.actionToMain()
         navigate(NavigationCommand.Dir(dir))
     }
 

@@ -5,7 +5,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.vps.android.R
+import com.vps.android.core.delegates.RenderProp
 import com.vps.android.core.ext.viewBinding
+import com.vps.android.core.ext.visible
 import com.vps.android.core.utils.Notify
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentAddTaskBinding
@@ -18,13 +20,14 @@ import com.vps.android.presentation.task.feature.AddTaskState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_task) {
 
     private val binding by viewBinding(FragmentAddTaskBinding::bind)
     private val args: AddTaskFragmentArgs by navArgs()
 
-    override val viewModel: AddTaskViewModel by viewModel()
+    override val viewModel: AddTaskViewModel by viewModel { parametersOf(args.spec) }
 
     override val stateBinding by lazy { AddTaskBinding() }
 
@@ -56,7 +59,7 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
         }
 
         binding.btnCreateTask.setSafeOnClickListener {
-
+            viewModel.checkAndCreateTask()
         }
 
         binding.btnBack.setSafeOnClickListener {
@@ -92,6 +95,13 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
             is AddTaskFeature.Event.Logout -> {
                 viewModel.toAuthScreen()
             }
+            is AddTaskFeature.Event.ShowNotFillError -> {
+                viewModel.notify(Notify.Text(getString(R.string.create_task_fill_error)))
+            }
+            is AddTaskFeature.Event.CreateTaskComplete -> {
+                viewModel.notify(Notify.Text(event.message))
+                viewModel.openMainScreen()
+            }
             is AddTaskFeature.Event.Error -> {
                 event.error.message?.let { viewModel.notify(Notify.Text(it)) }
             }
@@ -100,9 +110,15 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
 
     inner class AddTaskBinding : StateBinding() {
 
+        private var createTaskLoading: Boolean by RenderProp(false) { isLoading ->
+            binding.btnCreateTask.visible(!isLoading)
+            binding.progressBar.visible(isLoading)
+        }
+
         override fun bind(data: IViewModelState) {
             data as AddTaskState
 
+            createTaskLoading = data.createTaskLoading
             binding.tvTaskType.text = data.taskType?.name ?: ""
             binding.tvTaskLoading.text = data.loadingPlace?.name ?: ""
             binding.tvTaskUnloading.text = data.unloadingPlace?.name ?: ""

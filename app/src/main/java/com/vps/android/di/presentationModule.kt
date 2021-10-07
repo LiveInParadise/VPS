@@ -20,8 +20,8 @@ val presentationModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { MechanismTypeViewModel(get(), get()) }
     viewModel { MechanismViewModel(get(), get(), get(), get()) }
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { ServiceViewModel(get(), get()) }
-    viewModel { AddTaskViewModel(get()) }
+    viewModel { AddTaskViewModel(get(), get(), get()) }
     viewModel { SelectTaskViewModel(get(), get(), get(), get()) }
 }

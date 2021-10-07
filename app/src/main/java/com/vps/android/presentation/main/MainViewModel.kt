@@ -3,6 +3,8 @@ package com.vps.android.presentation.main
 import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import com.vps.android.MainNavigationDirections
+import com.vps.android.core.local.PrefManager
+import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.presentation.base.BaseViewModel
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 class MainViewModel(
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
+    private val prefManager: PrefManager,
 ) : BaseViewModel() {
 
     private val feature = MainFeature()
@@ -49,7 +52,9 @@ class MainViewModel(
     }
 
     fun openCreateTaskScreen() {
-        val spec = AddTaskSpec()
+        val spec = AddTaskSpec(
+            mechanismTypeClass = prefManager.userMechanismType?.getType() ?: MechanismTypeClass.SIMPLE
+        )
         val dir = MainNavigationDirections.actionToAddTask(spec)
         navigate(NavigationCommand.Dir(dir))
     }
