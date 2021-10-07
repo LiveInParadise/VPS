@@ -1,13 +1,13 @@
 package com.vps.android.presentation.auth
 
 import android.os.Bundle
-import android.util.Log
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import com.vps.android.R
 import com.vps.android.core.delegates.RenderProp
 import com.vps.android.core.ext.viewBinding
 import com.vps.android.core.ext.visible
+import com.vps.android.core.local.PrefManager
 import com.vps.android.core.utils.Notify
 import com.vps.android.databinding.FragmentAuthBinding
 import com.vps.android.presentation.auth.feature.AuthFeature
@@ -17,6 +17,7 @@ import com.vps.android.presentation.base.IViewModelState
 import com.vps.android.presentation.base.StateBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
@@ -25,6 +26,9 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
     override val viewModel: AuthViewModel by viewModel()
 
     override val stateBinding by lazy { AuthBinding() }
+
+    private val pref: PrefManager by inject()
+    private val pinLength by lazy { resources.getInteger(R.integer.pin_length) }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -45,11 +49,16 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
             }
 
             keypad.onKeypadClicked = {
-                otpView.setText(otpView.text.toString() + it)
+                val currentLength = otpView.text?.length ?: 0
+                if (currentLength < pinLength) {
+                    otpView.append(it)
+                }
             }
             keypad.onClearClicked = {
                 otpView.setText(otpView.text?.dropLast(1) ?: "")
             }
+
+            androidId.text = pref.deviceId
         }
     }
 

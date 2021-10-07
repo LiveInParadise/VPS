@@ -1,6 +1,7 @@
 package com.vps.android.core.network.errors
 
 import com.vps.android.core.network.base.BaseResponseObj
+import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
 import java.net.UnknownHostException
 
 class DefaultErrorMapper : ErrorMapper {
@@ -25,7 +26,7 @@ class DefaultErrorMapper : ErrorMapper {
 
     private fun <T, D : BaseResponseObj<T>> handleBaseApiError(
         error: BaseApiError,
-        data: D?
+        data: D?,
     ): Throwable {
         val message = error.errorMessage
         val code = error.code
@@ -38,7 +39,7 @@ class DefaultErrorMapper : ErrorMapper {
 
     private fun <T, D : MechanismSelectResponse<T>> handleBaseApiError(
         error: BaseApiError,
-        data: D?
+        data: D?,
     ): Throwable {
         val message = error.errorMessage
         val code = error.code
