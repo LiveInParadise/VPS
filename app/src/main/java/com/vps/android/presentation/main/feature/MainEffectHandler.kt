@@ -3,12 +3,14 @@ package com.vps.android.presentation.main.feature
 import com.vps.android.core.network.base.RequestResult
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
+import com.vps.android.interactors.task.TaskInteractor
 import com.vps.android.presentation.base.EffHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 
 class MainEffectHandler(
+    private val taskInteractor: TaskInteractor,
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
     private val events: Channel<MainFeature.Event>,
@@ -20,12 +22,12 @@ class MainEffectHandler(
         commit: (MainFeature.Action) -> Unit,
     ) {
         when (effect) {
-            is MainFeature.Effect.Logout -> {
+            is MainFeature.Effect.StartMechanismService -> {
                 withContext(Dispatchers.IO) {
-                    val result = authInteractor.logout()
+                    val result = mechanismInteractor.startMechanismService()
                     when (result) {
                         is RequestResult.Success -> {
-                            commit(MainFeature.Action.LogoutComplete)
+                            commit(MainFeature.Action.StartMechanismServiceComplete(result.data))
                         }
                         else -> {
                             commit(MainFeature.Action.Error(Throwable(result.toString())))
@@ -33,12 +35,19 @@ class MainEffectHandler(
                     }
                 }
             }
-            is MainFeature.Effect.StartMechanismService -> {
+            is MainFeature.Effect.GetTaskList -> {
                 withContext(Dispatchers.IO) {
-                    val result = mechanismInteractor.startMechanismService()
+                    val result = taskInteractor.getTaskList()
+                    commit(MainFeature.Action.GetTaskListComplete(result))
+                }
+            }
+
+            is MainFeature.Effect.Logout -> {
+                withContext(Dispatchers.IO) {
+                    val result = authInteractor.logout()
                     when (result) {
                         is RequestResult.Success -> {
-                            commit(MainFeature.Action.StartMechanismServiceComplete(result.data))
+                            commit(MainFeature.Action.LogoutComplete)
                         }
                         else -> {
                             commit(MainFeature.Action.Error(Throwable(result.toString())))

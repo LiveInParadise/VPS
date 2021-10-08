@@ -34,6 +34,7 @@
     <!-- Main -->
     <string name="dialog_service_message">Ar mechanizmas tikrai sugedęs?</string>
     <string name="main_no_tasks">Užduočių nėra.</string>
+    <string name="main_item_mechanism">Mechanizmai</string>
 
     <!-- Service -->
     <string name="service_title">Mechanizmas sugedęs</string>

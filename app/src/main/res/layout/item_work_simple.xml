@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_name"
+    android:layout_width="300dp"
+    android:layout_height="@dimen/mechanism_item_height"
+    android:background="@drawable/selector_bg_work_item"
+    android:fontFamily="sans-serif-black"
+    android:gravity="center"
+    android:textAlignment="gravity"
+    android:textAllCaps="true"
+    android:textColor="@color/selector_item_black_white"
+    android:textSize="20sp"
+    tools:text="Mechanizmo tipas 1" />

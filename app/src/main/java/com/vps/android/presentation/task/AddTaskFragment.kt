@@ -1,6 +1,8 @@
 package com.vps.android.presentation.task
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -100,12 +102,17 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
             }
             is AddTaskFeature.Event.CreateTaskComplete -> {
                 viewModel.notify(Notify.Text(event.message))
-                viewModel.openMainScreen()
+                sendFragmentResult()
+                viewModel.navigateBack()
             }
             is AddTaskFeature.Event.Error -> {
                 event.error.message?.let { viewModel.notify(Notify.Text(it)) }
             }
         }
+    }
+
+    private fun sendFragmentResult() {
+        setFragmentResult(CREATE_TASK, bundleOf(KEY_DATA to null))
     }
 
     inner class AddTaskBinding : StateBinding() {
@@ -125,6 +132,11 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
             binding.tvTaskGood.text = data.goodItem?.name ?: ""
             binding.tvTaskTech.text = data.mechanismItemList?.joinToString(", ") { it.name }
         }
+    }
+
+    companion object {
+        const val CREATE_TASK = "CREATE_TASK"
+        const val KEY_DATA = "KEY_DATA"
     }
 
 }

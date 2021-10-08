@@ -26,7 +26,15 @@ data class AddTaskState(
     override suspend fun reduce(action: AddTaskFeature.Action): Pair<AddTaskState, Set<AddTaskFeature.Effect>> =
         when (action) {
             is AddTaskFeature.Action.InitData -> {
-                copy(mechanismType = action.spec.mechanismTypeClass) to setOf()
+                val spec = action.spec
+                copy(
+                    mechanismType = spec.mechanismTypeClass,
+                    taskType = spec.taskType,
+                    loadingPlace = spec.loadingPlace,
+                    unloadingPlace = spec.unloadingPlace,
+                    goodItem = spec.goodItem,
+                    mechanismItemList = spec.mechanismItemList
+                ) to setOf()
             }
 
             is AddTaskFeature.Action.Logout -> {

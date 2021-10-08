@@ -59,6 +59,16 @@
             app:argType="com.vps.android.presentation.select_task.SelectTaskSpec" />
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_work_simple"
+        android:name="com.vps.android.presentation.work_simple.WorkSimpleFragment"
+        android:label=""
+        tools:layout="@layout/fragment_work_simple">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.work_simple.WorkSimpleSpec" />
+    </fragment>
+
 
     <!--  Actions  -->
     <action
@@ -103,6 +113,14 @@
         <argument
             android:name="spec"
             app:argType="com.vps.android.presentation.select_task.SelectTaskSpec" />
+    </action>
+
+    <action
+        android:id="@+id/action_to_work_simple"
+        app:destination="@id/nav_work_simple">
+        <argument
+            android:name="spec"
+            app:argType="com.vps.android.presentation.work_simple.WorkSimpleSpec" />
     </action>
 
 </navigation>

@@ -1,6 +1,7 @@
 package com.vps.android.domain.task
 
 import android.os.Parcelable
+import com.vps.android.core.recycler.RecyclerViewItem
 import com.vps.android.domain.mechanism.MechanismItem
 import kotlinx.parcelize.Parcelize
 
@@ -34,4 +35,30 @@ data class TaskInfo(
     val archived: Int,
     val taskDuration: String?,
     val selectedMechanismsInfo: List<MechanismItem>,
-) : Parcelable
+) : Parcelable, RecyclerViewItem {
+
+    override fun getId() = id
+
+    fun isActive() = active == 1
+
+    fun getTaskType() = TaskTypeItem(
+        id = taskTypeId,
+        name = taskTypeName,
+        mechanismTypeId = mechanismTypeId
+    )
+
+    fun getLoadingPlace() = PlaceItem(
+        id = loadingPlaceId,
+        name = loadingPlaceName,
+    )
+
+    fun getUnLoadingPlace() = PlaceItem(
+        id = unloadingPlaceId,
+        name = unloadingPlaceName,
+    )
+
+    fun getGoodItem() = GoodItem(
+        id = goodsId,
+        name = goodsName,
+    )
+}

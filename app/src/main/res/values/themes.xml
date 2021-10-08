@@ -78,4 +78,18 @@
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="MainTaskLabelStyle">
+        <item name="android:textColor">@color/base_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="MainTaskTextStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 </resources>

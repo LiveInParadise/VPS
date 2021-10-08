@@ -8,8 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AuthState(
     val phoneNumber: String = "",
-    val showError: Boolean = false,
     val isKeypadBlocked: Boolean = false,
+    val showError: Boolean = false,
     val errorMessage: String? = null,
     val isLoading: Boolean = false,
 ) : Parcelable, Reducer<AuthState, AuthFeature.Action, AuthFeature.Effect>, IViewModelState {

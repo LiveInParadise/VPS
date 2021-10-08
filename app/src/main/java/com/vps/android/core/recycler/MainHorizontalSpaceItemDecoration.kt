@@ -8,6 +8,8 @@ class MainHorizontalSpaceItemDecoration(private val horizontalSpaceHeight: Int) 
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         outRect.left = horizontalSpaceHeight
+        outRect.top = horizontalSpaceHeight
+        outRect.bottom = horizontalSpaceHeight
         if (parent.getChildAdapterPosition(view) == (parent.adapter?.itemCount ?: 0) - 1) {
             outRect.right = horizontalSpaceHeight
         }
