@@ -17,10 +17,10 @@ data class TaskInfo(
     val mechanismId: Int,
     val mechanismName: String,
     val selectedMechanisms: List<Int>?,
-    val goodsId: Int,
-    val goodsName: String,
-    val loadingPlaceId: Int,
-    val loadingPlaceName: String,
+    val goodsId: Int?,
+    val goodsName: String?,
+    val loadingPlaceId: Int?,
+    val loadingPlaceName: String?,
     val unloadingPlaceId: Int?,
     val unloadingPlaceName: String?,
     val distance: Int?,
@@ -47,24 +47,36 @@ data class TaskInfo(
         mechanismTypeId = mechanismTypeId
     )
 
-    fun getLoadingPlace() = PlaceItem(
-        id = loadingPlaceId,
-        name = loadingPlaceName,
-    )
+    fun getLoadingPlace(): PlaceItem? {
+        return if (loadingPlaceId != null && loadingPlaceName != null) {
+            PlaceItem(
+                id = loadingPlaceId,
+                name = loadingPlaceName,
+            )
+        } else {
+            null
+        }
+    }
 
     fun getUnLoadingPlace(): PlaceItem? {
-        return if (unloadingPlaceId == null || unloadingPlaceName == null) {
-            null
-        } else {
+        return if (unloadingPlaceId != null && unloadingPlaceName != null) {
             PlaceItem(
                 id = unloadingPlaceId,
                 name = unloadingPlaceName,
             )
+        } else {
+            null
         }
     }
 
-    fun getGoodItem() = GoodItem(
-        id = goodsId,
-        name = goodsName,
-    )
+    fun getGoodItem(): GoodItem? {
+        return if (goodsId != null && goodsName != null) {
+            GoodItem(
+                id = goodsId,
+                name = goodsName,
+            )
+        } else {
+            null
+        }
+    }
 }

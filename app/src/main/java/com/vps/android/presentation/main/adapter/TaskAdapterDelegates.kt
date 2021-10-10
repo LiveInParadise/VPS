@@ -7,7 +7,7 @@ import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.ItemTaskBinding
 import com.vps.android.domain.task.TaskInfo
 
-typealias EditClick = (TaskInfo) -> Unit
+typealias EditClick = (TaskInfo, Boolean) -> Unit
 typealias TaskActionClick = (TaskInfo, Boolean) -> Unit
 
 object TaskAdapterDelegates {
@@ -29,7 +29,7 @@ object TaskAdapterDelegates {
                 btnStop.visible(item.isActive())
 
                 btnEditSimple.setSafeOnClickListener {
-                    editClick.invoke(item)
+                    editClick.invoke(item, item.isActive())
                 }
 
                 btnStart.setSafeOnClickListener {

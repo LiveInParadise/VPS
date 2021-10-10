@@ -120,8 +120,8 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
         TaskAdapterDelegates.taskDelegate(::onEditClicked, ::actionClick)
     )
 
-    private fun onEditClicked(taskInfo: TaskInfo) {
-        viewModel.openCreateTaskScreen(taskInfo)
+    private fun onEditClicked(taskInfo: TaskInfo, isWorkStarted: Boolean) {
+        viewModel.openCreateTaskScreen(taskInfo, isWorkStarted)
     }
 
     private fun actionClick(taskInfo: TaskInfo, isStart: Boolean) {

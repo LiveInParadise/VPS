@@ -77,34 +77,30 @@ class MainViewModel(
 
     fun openCreateTaskScreen(taskInfo: TaskInfo? = null, isWorkStarted: Boolean = false) {
         val mechanismType = prefManager.userMechanismType?.getType() ?: MechanismTypeClass.SIMPLE
-        val spec = when (mechanismType) {
+        val typeClass: TaskTypeClass = when (mechanismType) {
             MechanismTypeClass.SIMPLE -> {
-                AddTaskSpec(
-                    taskId = taskInfo?.id,
-                    mechanismTypeClass = mechanismType,
-                    taskTypeClass = if (taskInfo != null) TaskTypeClass.SIMPLE_EDIT_NOT_ACTIVE else TaskTypeClass.SIMPLE_NEW,
-                    taskType = taskInfo?.getTaskType(),
-                    loadingPlace = taskInfo?.getLoadingPlace(),
-                    unloadingPlace = taskInfo?.getUnLoadingPlace(),
-                    goodItem = taskInfo?.getGoodItem(),
-                    mechanismItemList = taskInfo?.selectedMechanismsInfo,
-                )
+                if (taskInfo != null) TaskTypeClass.SIMPLE_EDIT_NOT_ACTIVE else TaskTypeClass.SIMPLE_NEW
             }
             MechanismTypeClass.COMBINED -> {
-                val typeClass = if (taskInfo != null && isWorkStarted) {
+                if (taskInfo != null && isWorkStarted) {
                     TaskTypeClass.COMBINED_EDIT_ACTIVE
                 } else if (taskInfo != null && !isWorkStarted) {
                     TaskTypeClass.COMBINED_EDIT_NOT_ACTIVE
                 } else {
                     TaskTypeClass.COMBINED_NEW
                 }
-                AddTaskSpec(
-                    taskId = taskInfo?.id,
-                    mechanismTypeClass = mechanismType,
-                    taskTypeClass = typeClass
-                )
             }
         }
+        val spec = AddTaskSpec(
+            taskId = taskInfo?.id,
+            mechanismTypeClass = mechanismType,
+            taskTypeClass = typeClass,
+            taskType = taskInfo?.getTaskType(),
+            loadingPlace = taskInfo?.getLoadingPlace(),
+            unloadingPlace = taskInfo?.getUnLoadingPlace(),
+            goodItem = taskInfo?.getGoodItem(),
+            mechanismItemList = taskInfo?.selectedMechanismsInfo,
+        )
         val dir = MainNavigationDirections.actionToAddTask(spec)
         navigate(NavigationCommand.Dir(dir))
     }
