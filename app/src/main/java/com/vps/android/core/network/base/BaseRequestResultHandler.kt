@@ -6,6 +6,7 @@ import com.vps.android.core.network.errors.ErrorBody
 import com.vps.android.core.network.errors.ErrorMapper
 import com.vps.android.core.network.ext.wrapResult
 import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
+import com.vps.android.interactors.task.response.CreateTaskResponse
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
@@ -54,6 +55,25 @@ abstract class BaseRequestResultHandler(
                     val response = result.data
                     when {
                         response.success != null -> RequestResult.Success(response.success.transform())
+                        else -> RequestResult.Error<D>(Throwable(response.error))
+                    }
+                }
+            }
+        }
+
+    suspend fun <R, T, D> callAndMapTask(action: suspend () -> R): RequestResult<D>
+            where R : CreateTaskResponse<T>,
+                  T : Transformable<D> =
+        withContext(dispatchersProvider.io()) {
+            return@withContext when (val result = wrapResult { action() }) {
+                is RequestResult.Error -> {
+                    val mappedError = errorMapper.mapTaskError<T, R>(result.error, null)
+                    RequestResult.Error(mappedError)
+                }
+                is RequestResult.Success -> {
+                    val response = result.data
+                    when {
+                        response.task != null -> RequestResult.Success(response.task.transform())
                         else -> RequestResult.Error<D>(Throwable(response.error))
                     }
                 }

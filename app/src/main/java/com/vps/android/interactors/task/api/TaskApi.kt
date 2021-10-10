@@ -5,10 +5,7 @@ import com.vps.android.interactors.task.request.CreateTaskRequest
 import com.vps.android.interactors.task.request.StartTaskRequest
 import com.vps.android.interactors.task.request.StopTaskRequest
 import com.vps.android.interactors.task.request.UpdateTaskRequest
-import com.vps.android.interactors.task.response.FullGoodItemObj
-import com.vps.android.interactors.task.response.PlaceItemObj
-import com.vps.android.interactors.task.response.TaskInfoObj
-import com.vps.android.interactors.task.response.TaskTypeObj
+import com.vps.android.interactors.task.response.*
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -22,7 +19,7 @@ interface TaskApi {
     @POST("/api/task/create")
     suspend fun createTask(
         @Body request: CreateTaskRequest,
-    ): BaseResponseObj<String>
+    ): CreateTaskResponse<TaskInfoObj>
 
     /**
      * Get list of task types
@@ -52,7 +49,7 @@ interface TaskApi {
     suspend fun editTask(
         @Path("id") taskId: Int,
         @Body request: UpdateTaskRequest,
-    ): BaseResponseObj<String>
+    ): CreateTaskResponse<TaskInfoObj>
 
     /**
      * Stop task

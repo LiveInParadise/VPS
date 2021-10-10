@@ -24,8 +24,8 @@ class TaskRepositoryImpl(
     private val pref: PrefManager,
 ) : TaskRepository, BaseRequestResultHandler(dispatchersProvider, errorMapper, gson) {
 
-    override suspend fun createTask(request: CreateTaskRequest): RequestResult<String> =
-        call {
+    override suspend fun createTask(request: CreateTaskRequest): RequestResult<TaskInfo> =
+        callAndMapTask {
             api.createTask(request)
         }
 
@@ -44,8 +44,8 @@ class TaskRepositoryImpl(
             api.startTask(taskId, request)
         }
 
-    override suspend fun editTask(taskId: Int, request: UpdateTaskRequest): RequestResult<String> =
-        call {
+    override suspend fun editTask(taskId: Int, request: UpdateTaskRequest): RequestResult<TaskInfo> =
+        callAndMapTask {
             api.editTask(taskId, request)
         }
 

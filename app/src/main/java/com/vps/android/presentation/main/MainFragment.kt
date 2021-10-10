@@ -95,6 +95,10 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
                 viewModel.notify(Notify.Text(event.message))
                 viewModel.openServiceScreen()
             }
+            is MainFeature.Event.StartSimpleTaskComplete -> {
+                viewModel.notify(Notify.Text(event.message))
+                viewModel.openWorkSimpleScreen(event.taskInfo)
+            }
             is MainFeature.Event.Error -> {
                 event.error.message?.let { viewModel.notify(Notify.Text(it)) }
             }
@@ -117,12 +121,14 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
     )
 
     private fun onEditClicked(taskInfo: TaskInfo) {
-
+        viewModel.openCreateTaskScreen(taskInfo)
     }
 
     private fun actionClick(taskInfo: TaskInfo, isStart: Boolean) {
         if (isStart) {
-            viewModel.openWorkSimpleScreen(taskInfo)
+            viewModel.startWorkTask(taskInfo)
+        } else {
+            viewModel.stopTask(taskInfo)
         }
     }
 

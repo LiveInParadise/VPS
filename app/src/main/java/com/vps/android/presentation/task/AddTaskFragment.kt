@@ -13,6 +13,9 @@ import com.vps.android.core.ext.visible
 import com.vps.android.core.utils.Notify
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentAddTaskBinding
+import com.vps.android.domain.mechanism.MechanismTypeClass
+import com.vps.android.domain.task.TaskInfo
+import com.vps.android.domain.task.TaskTypeClass
 import com.vps.android.presentation.base.BaseFragment
 import com.vps.android.presentation.base.IViewModelState
 import com.vps.android.presentation.base.StateBinding
@@ -61,7 +64,7 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
         }
 
         binding.btnCreateTask.setSafeOnClickListener {
-            viewModel.checkAndCreateTask()
+            viewModel.checkAndProcessTask()
         }
 
         binding.btnBack.setSafeOnClickListener {
@@ -101,8 +104,7 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
                 viewModel.notify(Notify.Text(getString(R.string.create_task_fill_error)))
             }
             is AddTaskFeature.Event.CreateTaskComplete -> {
-                viewModel.notify(Notify.Text(event.message))
-                sendFragmentResult()
+                sendFragmentResult(event.taskInfo)
                 viewModel.navigateBack()
             }
             is AddTaskFeature.Event.Error -> {
@@ -111,8 +113,48 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
         }
     }
 
-    private fun sendFragmentResult() {
-        setFragmentResult(CREATE_TASK, bundleOf(KEY_DATA to null))
+    private fun sendFragmentResult(taskInfo: TaskInfo) {
+        setFragmentResult(CREATE_TASK, bundleOf(KEY_DATA to taskInfo))
+    }
+
+    private fun renderMechanismType(mechanismType: MechanismTypeClass) {
+        when (mechanismType) {
+            MechanismTypeClass.SIMPLE -> {
+                binding.containerTaskUnloading.visible(false)
+                binding.containerTaskTech.visible(true)
+            }
+            MechanismTypeClass.COMBINED -> {
+                binding.containerTaskUnloading.visible(true)
+                binding.containerTaskTech.visible(false)
+            }
+        }
+    }
+
+    private fun renderTaskTypeClass(taskTypeClass: TaskTypeClass) {
+        when (taskTypeClass) {
+            TaskTypeClass.SIMPLE_EDIT_NOT_ACTIVE, TaskTypeClass.SIMPLE_NEW -> {
+                binding.containerTaskType.isClickable = true
+                binding.containerTaskLoading.isClickable = true
+                binding.containerTaskGood.isClickable = true
+                binding.containerTaskTech.isClickable = true
+
+                binding.ivArrowType.visible(true)
+                binding.ivArrowLoading.visible(true)
+                binding.ivArrowGood.visible(true)
+                binding.ivArrowTech.visible(true)
+            }
+            TaskTypeClass.SIMPLE_EDIT_ACTIVE -> {
+                binding.containerTaskType.isClickable = false
+                binding.containerTaskLoading.isClickable = false
+                binding.containerTaskGood.isClickable = false
+                binding.containerTaskTech.isClickable = true
+
+                binding.ivArrowType.visible(false)
+                binding.ivArrowLoading.visible(false)
+                binding.ivArrowGood.visible(false)
+                binding.ivArrowTech.visible(true)
+            }
+        }
     }
 
     inner class AddTaskBinding : StateBinding() {
@@ -125,6 +167,8 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
         override fun bind(data: IViewModelState) {
             data as AddTaskState
 
+            renderMechanismType(data.mechanismType)
+            renderTaskTypeClass(data.taskTypeClass)
             createTaskLoading = data.createTaskLoading
             binding.tvTaskType.text = data.taskType?.name ?: ""
             binding.tvTaskLoading.text = data.loadingPlace?.name ?: ""

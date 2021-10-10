@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.vps.android.MainNavigationDirections
 import com.vps.android.domain.mechanism.MechanismItem
 import com.vps.android.domain.mechanism.MechanismTypeClass
-import com.vps.android.domain.task.EditTaskSourcePage
+import com.vps.android.domain.task.TaskInfo
+import com.vps.android.domain.task.TaskTypeClass
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.interactors.task.TaskInteractor
 import com.vps.android.presentation.base.BaseViewModel
 import com.vps.android.presentation.base.NavigationCommand
+import com.vps.android.presentation.task.AddTaskFragment
 import com.vps.android.presentation.task.AddTaskSpec
 import com.vps.android.presentation.work_simple.feature.WorkSimpleEffectHandler
 import com.vps.android.presentation.work_simple.feature.WorkSimpleFeature
@@ -32,11 +34,11 @@ class WorkSimpleViewModel(
 
     init {
         feature.init(viewModelScope, WorkSimpleEffectHandler(taskInteractor, mechanismInteractor, _events, _messages))
-        initType()
+        initType(spec.taskInfo)
     }
 
-    private fun initType() {
-        feature.act(WorkSimpleFeature.Action.InitTask(spec.taskInfo))
+    private fun initType(taskInfo: TaskInfo) {
+        feature.act(WorkSimpleFeature.Action.InitTask(taskInfo))
     }
 
     fun stopTask() {
@@ -47,6 +49,11 @@ class WorkSimpleViewModel(
         feature.act(WorkSimpleFeature.Action.SelectMechanism(mechanismItem.id))
     }
 
+    fun saveResult(bundle: Bundle) {
+        val taskInfo = bundle[AddTaskFragment.KEY_DATA] as TaskInfo?
+        taskInfo?.let { initType(it) }
+    }
+
     fun toMainScreen() {
         val dir = MainNavigationDirections.actionToMain()
         navigate(NavigationCommand.Dir(dir))
@@ -55,13 +62,14 @@ class WorkSimpleViewModel(
     fun toEditScreen() {
         val taskItem = state.value.taskInfo ?: return
         val spec = AddTaskSpec(
+            taskId = taskItem.id,
             mechanismTypeClass = MechanismTypeClass.SIMPLE,
             taskType = taskItem.getTaskType(),
             loadingPlace = taskItem.getLoadingPlace(),
             unloadingPlace = taskItem.getUnLoadingPlace(),
             goodItem = taskItem.getGoodItem(),
             mechanismItemList = taskItem.selectedMechanismsInfo,
-            sourcePage = EditTaskSourcePage.WORK_SIMPLE
+            taskTypeClass = TaskTypeClass.SIMPLE_EDIT_ACTIVE
         )
         val dir = MainNavigationDirections.actionToAddTask(spec)
         navigate(NavigationCommand.Dir(dir))

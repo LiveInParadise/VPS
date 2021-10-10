@@ -41,6 +41,33 @@ class MainEffectHandler(
                     commit(MainFeature.Action.GetTaskListComplete(result))
                 }
             }
+            is MainFeature.Effect.StartSimpleTask -> {
+                withContext(Dispatchers.IO) {
+                    val result = taskInteractor.startTask(effect.taskId, effect.request)
+                    when (result) {
+                        is RequestResult.Success -> {
+                            commit(MainFeature.Action.StartTaskComplete(result.data, effect.taskId))
+                        }
+                        else -> {
+                            commit(MainFeature.Action.Error(Throwable(result.toString())))
+                        }
+                    }
+                }
+            }
+
+            is MainFeature.Effect.StopCombinedTask -> {
+                withContext(Dispatchers.IO) {
+                    val result = taskInteractor.stopTask(effect.taskId, effect.request)
+                    when (result) {
+                        is RequestResult.Success -> {
+                            commit(MainFeature.Action.StopTaskComplete(result.data))
+                        }
+                        else -> {
+                            commit(MainFeature.Action.Error(Throwable(result.toString())))
+                        }
+                    }
+                }
+            }
 
             is MainFeature.Effect.Logout -> {
                 withContext(Dispatchers.IO) {

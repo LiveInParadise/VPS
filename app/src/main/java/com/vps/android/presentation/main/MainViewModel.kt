@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.vps.android.MainNavigationDirections
 import com.vps.android.core.local.PrefManager
 import com.vps.android.domain.mechanism.MechanismTypeClass
-import com.vps.android.domain.task.EditTaskSourcePage
 import com.vps.android.domain.task.TaskInfo
+import com.vps.android.domain.task.TaskTypeClass
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.interactors.task.TaskInteractor
@@ -24,7 +24,7 @@ class MainViewModel(
     private val taskInteractor: TaskInteractor,
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
-    private val prefManager: PrefManager,
+    val prefManager: PrefManager,
 ) : BaseViewModel() {
 
     private val feature = MainFeature()
@@ -57,6 +57,14 @@ class MainViewModel(
         feature.act(MainFeature.Action.StartMechanismService)
     }
 
+    fun startWorkTask(taskInfo: TaskInfo) {
+        feature.act(MainFeature.Action.StartTask(taskInfo.id))
+    }
+
+    fun stopTask(taskInfo: TaskInfo) {
+        feature.act(MainFeature.Action.StopTask(taskInfo.id))
+    }
+
     fun toAuthScreen() {
         val dir = MainNavigationDirections.actionLogout()
         navigate(NavigationCommand.Dir(dir))
@@ -67,11 +75,36 @@ class MainViewModel(
         navigate(NavigationCommand.Dir(dir))
     }
 
-    fun openCreateTaskScreen() {
-        val spec = AddTaskSpec(
-            mechanismTypeClass = prefManager.userMechanismType?.getType() ?: MechanismTypeClass.SIMPLE,
-            sourcePage = EditTaskSourcePage.MAIN
-        )
+    fun openCreateTaskScreen(taskInfo: TaskInfo? = null, isWorkStarted: Boolean = false) {
+        val mechanismType = prefManager.userMechanismType?.getType() ?: MechanismTypeClass.SIMPLE
+        val spec = when (mechanismType) {
+            MechanismTypeClass.SIMPLE -> {
+                AddTaskSpec(
+                    taskId = taskInfo?.id,
+                    mechanismTypeClass = mechanismType,
+                    taskTypeClass = if (taskInfo != null) TaskTypeClass.SIMPLE_EDIT_NOT_ACTIVE else TaskTypeClass.SIMPLE_NEW,
+                    taskType = taskInfo?.getTaskType(),
+                    loadingPlace = taskInfo?.getLoadingPlace(),
+                    unloadingPlace = taskInfo?.getUnLoadingPlace(),
+                    goodItem = taskInfo?.getGoodItem(),
+                    mechanismItemList = taskInfo?.selectedMechanismsInfo,
+                )
+            }
+            MechanismTypeClass.COMBINED -> {
+                val typeClass = if (taskInfo != null && isWorkStarted) {
+                    TaskTypeClass.COMBINED_EDIT_ACTIVE
+                } else if (taskInfo != null && !isWorkStarted) {
+                    TaskTypeClass.COMBINED_EDIT_NOT_ACTIVE
+                } else {
+                    TaskTypeClass.COMBINED_NEW
+                }
+                AddTaskSpec(
+                    taskId = taskInfo?.id,
+                    mechanismTypeClass = mechanismType,
+                    taskTypeClass = typeClass
+                )
+            }
+        }
         val dir = MainNavigationDirections.actionToAddTask(spec)
         navigate(NavigationCommand.Dir(dir))
     }

@@ -3,6 +3,7 @@ package com.vps.android.domain.task
 import android.os.Parcelable
 import com.vps.android.core.recycler.RecyclerViewItem
 import com.vps.android.domain.mechanism.MechanismItem
+import com.vps.android.domain.mechanism.MechanismTypeClass
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -11,7 +12,7 @@ data class TaskInfo(
     val taskTypeId: Int,
     val taskTypeName: String,
     val workerId: Int,
-    val workerName: String,
+    val workerName: String?,
     val mechanismTypeId: Int,
     val mechanismTypeName: String,
     val mechanismId: Int,

@@ -38,7 +38,20 @@ class AddTaskEffectHandler(
                     val result = taskInteractor.createTask(effect.request)
                     when (result) {
                         is RequestResult.Success -> {
-                            commit(AddTaskFeature.Action.CreateTaskComplete(result.data))
+                            commit(AddTaskFeature.Action.ProcessTaskComplete(result.data))
+                        }
+                        else -> {
+                            commit(AddTaskFeature.Action.Error(Throwable(result.toString())))
+                        }
+                    }
+                }
+            }
+            is AddTaskFeature.Effect.UpdateTask -> {
+                withContext(Dispatchers.IO) {
+                    val result = taskInteractor.editTask(effect.taskId, effect.request)
+                    when (result) {
+                        is RequestResult.Success -> {
+                            commit(AddTaskFeature.Action.ProcessTaskComplete(result.data))
                         }
                         else -> {
                             commit(AddTaskFeature.Action.Error(Throwable(result.toString())))

@@ -101,8 +101,8 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
     }
 
     private fun initListeners() {
-        setFragmentResultListener(AddTaskFragment.CREATE_TASK) { _, _ ->
-//            viewModel.getTasks()
+        setFragmentResultListener(AddTaskFragment.CREATE_TASK) { _, bundle ->
+            viewModel.saveResult(bundle)
         }
     }
 
@@ -114,7 +114,7 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
             }
             is WorkSimpleFeature.Event.SelectMechanismSuccess -> {
                 viewModel.notify(Notify.Text(event.message))
-                SimpleWorkAdapterDelegates.changeSelection(event.mechanismId)
+                SimpleWorkAdapterDelegates.selectedId = event.mechanismId
                 adapter.notifyDataSetChanged()
             }
             is WorkSimpleFeature.Event.Error -> {
@@ -151,7 +151,7 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
             binding.tvError.visible(true)
             binding.tvError.text = errorMessage
         } else {
-            binding.tvError.visible(false)
+            binding.tvError.visible(false, hide = true)
         }
     }
 

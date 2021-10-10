@@ -6,7 +6,7 @@ import okhttp3.Response
 import org.koin.core.component.KoinComponent
 
 class AuthInterceptor(
-    private val pref: PrefManager
+    private val pref: PrefManager,
 ) : Interceptor, KoinComponent {
 
     override fun intercept(chain: Interceptor.Chain): Response {

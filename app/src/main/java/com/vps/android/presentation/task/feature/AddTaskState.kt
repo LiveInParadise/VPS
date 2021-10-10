@@ -5,15 +5,19 @@ import com.vps.android.domain.mechanism.MechanismItem
 import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.domain.task.GoodItem
 import com.vps.android.domain.task.PlaceItem
+import com.vps.android.domain.task.TaskTypeClass
 import com.vps.android.domain.task.TaskTypeItem
 import com.vps.android.interactors.task.request.CreateTaskRequest
+import com.vps.android.interactors.task.request.UpdateTaskRequest
 import com.vps.android.presentation.base.IViewModelState
 import com.vps.android.presentation.base.Reducer
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class AddTaskState(
-    val mechanismType: MechanismTypeClass? = MechanismTypeClass.SIMPLE,
+    val mechanismType: MechanismTypeClass = MechanismTypeClass.SIMPLE,
+    val taskTypeClass: TaskTypeClass = TaskTypeClass.SIMPLE_NEW,
+    val taskId: Int? = null,
     val taskType: TaskTypeItem? = null,
     val loadingPlace: PlaceItem? = null,
     val unloadingPlace: PlaceItem? = null,
@@ -29,6 +33,7 @@ data class AddTaskState(
                 val spec = action.spec
                 copy(
                     mechanismType = spec.mechanismTypeClass,
+                    taskTypeClass = spec.taskTypeClass,
                     taskType = spec.taskType,
                     loadingPlace = spec.loadingPlace,
                     unloadingPlace = spec.unloadingPlace,
@@ -60,32 +65,42 @@ data class AddTaskState(
                 copy(mechanismItemList = action.items) to setOf()
             }
 
-            is AddTaskFeature.Action.CheckAndCreateTask -> {
+            is AddTaskFeature.Action.CheckAndProcessTask -> {
                 val isCorrect = when (mechanismType) {
                     MechanismTypeClass.SIMPLE -> {
-                        taskType != null && loadingPlace != null && unloadingPlace != null && goodItem != null
+                        taskType != null && loadingPlace != null && goodItem != null
                     }
                     MechanismTypeClass.COMBINED -> {
                         taskType != null
                     }
-                    else -> false
                 }
                 if (isCorrect) {
-                    val request = CreateTaskRequest(
-                        task_type_id = taskType?.id ?: -1,
-                        loading_place_id = loadingPlace?.id,
-                        unloading_place_id = unloadingPlace?.id,
-                        goods_id = goodItem?.id,
-                        selected_mechanisms = mechanismItemList?.map { it.id }
-                    )
-                    copy(createTaskLoading = true) to setOf(AddTaskFeature.Effect.CreateTask(request))
+                    if (taskId != null) {
+                        val request = UpdateTaskRequest(
+                            task_type_id = taskType?.id ?: -1,
+                            loading_place_id = loadingPlace?.id,
+                            unloading_place_id = unloadingPlace?.id,
+                            goods_id = goodItem?.id,
+                            selected_mechanisms = mechanismItemList?.map { it.id }
+                        )
+                        copy(createTaskLoading = true) to setOf(AddTaskFeature.Effect.UpdateTask(taskId, request))
+                    } else {
+                        val request = CreateTaskRequest(
+                            task_type_id = taskType?.id ?: -1,
+                            loading_place_id = loadingPlace?.id,
+                            unloading_place_id = unloadingPlace?.id,
+                            goods_id = goodItem?.id,
+                            selected_mechanisms = mechanismItemList?.map { it.id }
+                        )
+                        copy(createTaskLoading = true) to setOf(AddTaskFeature.Effect.CreateTask(request))
+                    }
                 } else {
                     AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.ShowNotFillError)
                     copy() to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.ShowNotFillError))
                 }
             }
-            is AddTaskFeature.Action.CreateTaskComplete -> {
-                copy(createTaskLoading = false) to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.CreateTaskComplete(action.message)))
+            is AddTaskFeature.Action.ProcessTaskComplete -> {
+                copy(createTaskLoading = false) to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.CreateTaskComplete(action.taskInfo)))
             }
 
             is AddTaskFeature.Action.Error -> {

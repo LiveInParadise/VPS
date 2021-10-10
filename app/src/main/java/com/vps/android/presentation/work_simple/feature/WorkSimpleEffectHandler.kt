@@ -1,5 +1,6 @@
 package com.vps.android.presentation.work_simple.feature
 
+import com.vps.android.core.ext.toRequestFormat
 import com.vps.android.core.network.base.RequestResult
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.interactors.task.TaskInteractor
@@ -8,7 +9,6 @@ import com.vps.android.presentation.base.EffHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.*
 
 class WorkSimpleEffectHandler(
@@ -25,8 +25,7 @@ class WorkSimpleEffectHandler(
         when (effect) {
             is WorkSimpleFeature.Effect.StopTask -> {
                 withContext(Dispatchers.IO) {
-                    val currentDate = SimpleDateFormat("Y-M-d H:m:s").format(Date())
-                    val request = StopTaskRequest(currentDate)
+                    val request = StopTaskRequest(Date().toRequestFormat())
                     val result = taskInteractor.stopTask(effect.taskId, request)
                     when (result) {
                         is RequestResult.Success -> {

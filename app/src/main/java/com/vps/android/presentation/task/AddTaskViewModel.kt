@@ -45,8 +45,8 @@ class AddTaskViewModel(
         feature.act(AddTaskFeature.Action.Logout)
     }
 
-    fun checkAndCreateTask() {
-        feature.act(AddTaskFeature.Action.CheckAndCreateTask)
+    fun checkAndProcessTask() {
+        feature.act(AddTaskFeature.Action.CheckAndProcessTask)
     }
 
     fun onSelectTaskBundle(bundle: Bundle) {
