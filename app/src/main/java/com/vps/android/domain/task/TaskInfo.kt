@@ -3,7 +3,6 @@ package com.vps.android.domain.task
 import android.os.Parcelable
 import com.vps.android.core.recycler.RecyclerViewItem
 import com.vps.android.domain.mechanism.MechanismItem
-import com.vps.android.domain.mechanism.MechanismTypeClass
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -22,8 +21,8 @@ data class TaskInfo(
     val goodsName: String,
     val loadingPlaceId: Int,
     val loadingPlaceName: String,
-    val unloadingPlaceId: Int,
-    val unloadingPlaceName: String,
+    val unloadingPlaceId: Int?,
+    val unloadingPlaceName: String?,
     val distance: Int?,
     val startTime: String?,
     val endTime: String?,
@@ -53,10 +52,16 @@ data class TaskInfo(
         name = loadingPlaceName,
     )
 
-    fun getUnLoadingPlace() = PlaceItem(
-        id = unloadingPlaceId,
-        name = unloadingPlaceName,
-    )
+    fun getUnLoadingPlace(): PlaceItem? {
+        return if (unloadingPlaceId == null || unloadingPlaceName == null) {
+            null
+        } else {
+            PlaceItem(
+                id = unloadingPlaceId,
+                name = unloadingPlaceName,
+            )
+        }
+    }
 
     fun getGoodItem() = GoodItem(
         id = goodsId,

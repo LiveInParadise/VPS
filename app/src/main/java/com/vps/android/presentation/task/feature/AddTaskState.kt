@@ -32,6 +32,7 @@ data class AddTaskState(
             is AddTaskFeature.Action.InitData -> {
                 val spec = action.spec
                 copy(
+                    taskId = spec.taskId,
                     mechanismType = spec.mechanismTypeClass,
                     taskTypeClass = spec.taskTypeClass,
                     taskType = spec.taskType,
@@ -105,7 +106,7 @@ data class AddTaskState(
 
             is AddTaskFeature.Action.Error -> {
                 val error = action.error
-                copy(isLoading = false) to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.Error(error)))
+                copy(isLoading = false, createTaskLoading = false) to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.Error(error)))
             }
         }
 

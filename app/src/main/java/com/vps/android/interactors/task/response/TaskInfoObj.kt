@@ -20,7 +20,7 @@ data class TaskInfoObj(
     val goods_name: String,
     val loading_place_id: Int,
     val loading_place_name: String,
-    val unloading_place_id: Int,
+    val unloading_place_id: Int?,
     val unloading_place_name: String?,
     val distance: Int?,
     val start_time: String?,
