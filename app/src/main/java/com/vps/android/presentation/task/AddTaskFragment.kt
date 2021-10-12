@@ -154,6 +154,29 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
                 binding.ivArrowGood.visible(false)
                 binding.ivArrowTech.visible(true)
             }
+
+            TaskTypeClass.COMBINED_EDIT_NOT_ACTIVE, TaskTypeClass.COMBINED_NEW -> {
+                binding.containerTaskType.isClickable = true
+                binding.containerTaskLoading.isClickable = true
+                binding.containerTaskGood.isClickable = true
+                binding.containerTaskUnloading.isClickable = true
+
+                binding.ivArrowType.visible(true)
+                binding.ivArrowLoading.visible(true)
+                binding.ivArrowGood.visible(true)
+                binding.ivArrowUnloading.visible(true)
+            }
+            TaskTypeClass.COMBINED_EDIT_ACTIVE -> {
+                binding.containerTaskType.isClickable = false
+                binding.containerTaskLoading.isClickable = false
+                binding.containerTaskGood.isClickable = false
+                binding.containerTaskUnloading.isClickable = true
+
+                binding.ivArrowType.visible(false)
+                binding.ivArrowLoading.visible(false)
+                binding.ivArrowGood.visible(false)
+                binding.ivArrowUnloading.visible(true)
+            }
         }
     }
 

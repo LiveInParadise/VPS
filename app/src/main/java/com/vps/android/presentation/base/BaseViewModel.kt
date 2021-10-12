@@ -11,10 +11,7 @@ import com.vps.android.core.dispatchers.DispatchersProvider
 import com.vps.android.core.network.base.RequestResult
 import com.vps.android.core.network.errors.ApiError
 import com.vps.android.core.utils.Notify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
@@ -37,7 +34,6 @@ abstract class BaseViewModel : ViewModel(), KoinComponent, CoroutineScope {
         parentJob.cancelChildren()
     }
 
-    // контекст слушает и показывает
     fun observeNotifications(owner: LifecycleOwner, onNotify: (notification: Notify) -> Unit) {
         notifications.observe(owner, EventObserver { onNotify(it) })
     }
@@ -74,40 +70,12 @@ abstract class BaseViewModel : ViewModel(), KoinComponent, CoroutineScope {
             block()
         }
 
-    suspend inline fun <T> RequestResult<T>.handleResult(noinline block: suspend (RequestResult.Success<T>) -> Unit) {
-        runOnUi {
-            when (val result = this@handleResult) {
-                is RequestResult.Success -> block(result)
-                is RequestResult.Error -> mapAndShowError(result.error)
-            }
+    suspend fun scheduleRepeatedly(delayTimeMillis: Long, action: suspend CoroutineScope.() -> Unit) = coroutineScope {
+        while (true) {
+            delay(delayTimeMillis)
+            launch { action() }
         }
     }
-
-    suspend inline fun <T> RequestResult<T>.handleResultWithError(
-        noinline resultBlock: suspend (RequestResult.Success<T>) -> Unit,
-        noinline errorBlock: suspend (Throwable) -> Unit,
-    ) = runOnUi {
-        when (val result = this@handleResultWithError) {
-            is RequestResult.Success -> resultBlock(result)
-            is RequestResult.Error -> errorBlock(result.error)
-        }
-    }
-
-    open fun mapAndShowError(error: Throwable) {
-        notify(Notify.Error(mapError(error)))
-    }
-
-    open fun mapError(error: Throwable): String =
-        context.getString(
-            when (error) {
-                is ApiError.GeneralError -> R.string.error_api_default
-                is ApiError.NoDataError -> R.string.error_api_default
-                is ApiError.BreakDataError -> R.string.error_api_break_date
-                is ApiError.TokenError -> R.string.error_api_token_error
-                is ApiError.UnknownError -> R.string.error_api_default
-                else -> R.string.error_api_default
-            }
-        )
 }
 
 class Event<out E>(private val content: E, private var consumeHandler: (() -> Unit)? = null) {

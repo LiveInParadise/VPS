@@ -96,7 +96,6 @@ data class AddTaskState(
                         copy(createTaskLoading = true) to setOf(AddTaskFeature.Effect.CreateTask(request))
                     }
                 } else {
-                    AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.ShowNotFillError)
                     copy() to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.ShowNotFillError))
                 }
             }

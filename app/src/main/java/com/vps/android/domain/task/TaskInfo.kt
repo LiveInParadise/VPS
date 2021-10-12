@@ -40,6 +40,7 @@ data class TaskInfo(
     override fun getId() = id
 
     fun isActive() = active == 1
+    fun isDelegated() = isDelegated == 1
 
     fun getTaskType() = TaskTypeItem(
         id = taskTypeId,

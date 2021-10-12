@@ -35,6 +35,8 @@
     <string name="dialog_service_message">Ar mechanizmas tikrai sugedęs?</string>
     <string name="main_no_tasks">Užduočių nėra.</string>
     <string name="main_item_mechanism">Mechanizmai</string>
+    <string name="main_item_start_send_task_error">You cannot start task with active one</string>
+    <string name="main_item_stop_task_without_unloading_place">You cannot stop task without unloading place</string>
 
     <!-- Service -->
     <string name="service_title">Mechanizmas sugedęs</string>

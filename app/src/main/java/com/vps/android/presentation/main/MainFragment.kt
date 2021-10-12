@@ -15,6 +15,7 @@ import com.vps.android.core.recycler.MainHorizontalSpaceItemDecoration
 import com.vps.android.core.utils.Notify
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentMainBinding
+import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.domain.task.TaskInfo
 import com.vps.android.presentation.base.BaseFragment
 import com.vps.android.presentation.base.IViewModelState
@@ -82,7 +83,7 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
 
     private fun initListeners() {
         setFragmentResultListener(AddTaskFragment.CREATE_TASK) { _, _ ->
-            viewModel.getTasks()
+            viewModel.getTasksForce()
         }
     }
 
@@ -93,11 +94,22 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
             }
             is MainFeature.Event.StartMechanismServiceComplete -> {
                 viewModel.notify(Notify.Text(event.message))
+                viewModel.stopWorkUpdate()
                 viewModel.openServiceScreen()
             }
             is MainFeature.Event.StartSimpleTaskComplete -> {
                 viewModel.notify(Notify.Text(event.message))
                 viewModel.openWorkSimpleScreen(event.taskInfo)
+            }
+            is MainFeature.Event.StartCombinedTaskComplete -> {
+                viewModel.notify(Notify.Text(event.message))
+                viewModel.getTasks()
+            }
+            is MainFeature.Event.StartSecondTaskError -> {
+                viewModel.notify(Notify.Text(getString(R.string.main_item_start_send_task_error)))
+            }
+            is MainFeature.Event.StopTaskWithoutUnloadingPlaceError -> {
+                viewModel.notify(Notify.Text(getString(R.string.main_item_stop_task_without_unloading_place)))
             }
             is MainFeature.Event.Error -> {
                 event.error.message?.let { viewModel.notify(Notify.Text(it)) }
@@ -117,7 +129,9 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
     }
 
     private fun createAdapter() = BaseDelegationAdapter(
-        TaskAdapterDelegates.taskDelegate(::onEditClicked, ::actionClick)
+        TaskAdapterDelegates.taskDelegate(::onEditClicked, ::actionClick).apply {
+            TaskAdapterDelegates.mechanismTypeClass = viewModel.prefManager.userMechanismType?.getType() ?: MechanismTypeClass.SIMPLE
+        }
     )
 
     private fun onEditClicked(taskInfo: TaskInfo, isWorkStarted: Boolean) {
@@ -147,7 +161,9 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
         if (taskItems.isNotEmpty()) {
             binding.noItems.visible(false)
             binding.recyclerView.visible(true)
-            adapter.items = taskItems
+            adapter.setItems(taskItems) {
+                binding.recyclerView.scrollToPosition(0)
+            }
         } else {
             binding.recyclerView.visible(false)
             binding.noItems.visible(true)

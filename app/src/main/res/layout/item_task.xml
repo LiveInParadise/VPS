@@ -24,13 +24,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin_double"
         android:layout_marginEnd="@dimen/default_margin_double"
-        app:layout_constraintEnd_toStartOf="@id/btn_edit_simple"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_not_active"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_task_type_label"
         tools:text="@string/create_task_type_label" />
 
     <ImageView
-        android:id="@+id/btn_edit_simple"
+        android:id="@+id/btn_edit_not_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/default_margin_double"
@@ -106,12 +106,82 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin_double"
         android:layout_marginEnd="@dimen/default_margin_double"
-        android:lines="3"
         android:maxLines="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_task_tech_label"
         tools:text="@string/create_task_tech_label" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_tech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_task_tech_label,tv_task_tech" />
+
+    <TextView
+        android:id="@+id/tv_task_unloading_label"
+        style="@style/MainTaskLabelStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_double"
+        android:layout_marginTop="20dp"
+        android:text="@string/create_task_unloading_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_task_tech" />
+
+    <TextView
+        android:id="@+id/tv_task_unloading"
+        style="@style/MainTaskTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin_double"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="@dimen/default_margin_double"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_active"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_task_unloading_label"
+        tools:text="@string/create_task_unloading_label" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_unloading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_task_unloading_label,tv_task_unloading" />
+
+    <ImageView
+        android:id="@+id/btn_edit_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/default_margin_double"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="6dp"
+        android:src="@drawable/ic_edit"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_task_unloading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_task_unloading_label"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/v_combined_footer"
+        android:layout_width="match_parent"
+        android:layout_height="148dp"
+        android:background="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@id/v_combined_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/v_combined_footer"
+        tools:text="00:00:00" />
 
     <ImageView
         android:id="@+id/btn_start"
@@ -138,6 +208,4 @@
         android:src="@drawable/ic_stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

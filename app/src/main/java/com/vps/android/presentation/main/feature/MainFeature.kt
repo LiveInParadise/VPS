@@ -15,6 +15,7 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
         data class InitMechanism(val mechanismType: MechanismTypeClass) : Action()
 
         object GetTaskList : Action()
+        object GetTaskListForce : Action()
         data class GetTaskListComplete(val items: List<TaskInfo>) : Action()
 
         object Logout : Action()
@@ -26,7 +27,7 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
         data class StartTask(val taskId: Int) : Action()
         data class StartTaskComplete(val message: String, val taskId: Int) : Action()
 
-        data class StopTask(val taskId: Int) : Action()
+        data class StopTask(val taskInfo: TaskInfo) : Action()
         data class StopTaskComplete(val message: String) : Action()
 
         data class Error(val error: Throwable) : Action()
@@ -50,6 +51,10 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
 
         data class StartMechanismServiceComplete(val message: String) : Event()
         data class StartSimpleTaskComplete(val message: String, val taskInfo: TaskInfo) : Event()
+        data class StartCombinedTaskComplete(val message: String) : Event()
+
+        object StartSecondTaskError : Event()
+        object StopTaskWithoutUnloadingPlaceError : Event()
 
         data class Error(val error: Throwable) : Event()
     }

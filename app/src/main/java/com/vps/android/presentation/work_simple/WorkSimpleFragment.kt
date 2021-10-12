@@ -11,6 +11,7 @@ import com.vps.android.core.ext.viewBinding
 import com.vps.android.core.ext.visible
 import com.vps.android.core.recycler.BaseDelegationAdapter
 import com.vps.android.core.recycler.GridSpaceItemDecoration
+import com.vps.android.core.utils.CommonUtils
 import com.vps.android.core.utils.Notify
 import com.vps.android.core.utils.setSafeOnClickListener
 import com.vps.android.databinding.FragmentWorkSimpleBinding
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
 class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_work_simple) {
@@ -78,9 +78,7 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
             val dif = currentTime - startTime
 
             binding.tvTimer.post {
-                binding.tvTimer.text = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(dif),
-                    TimeUnit.MILLISECONDS.toMinutes(dif) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(dif)),
-                    TimeUnit.MILLISECONDS.toSeconds(dif) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(dif)))
+                binding.tvTimer.text = CommonUtils.convertMsToTime(dif)
             }
         }
         timerTask?.run()

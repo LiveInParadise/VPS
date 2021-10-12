@@ -16,9 +16,12 @@ import com.vps.android.presentation.main.feature.MainEffectHandler
 import com.vps.android.presentation.main.feature.MainFeature
 import com.vps.android.presentation.task.AddTaskSpec
 import com.vps.android.presentation.work_simple.WorkSimpleSpec
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val taskInteractor: TaskInteractor,
@@ -34,6 +37,8 @@ class MainViewModel(
     protected val _events: Channel<MainFeature.Event> = Channel()
     val events: Flow<MainFeature.Event> = _events.receiveAsFlow()
 
+    private var updateJob: Job? = null
+
     init {
         feature.init(viewModelScope, MainEffectHandler(taskInteractor, mechanismInteractor, authInteractor, _events, _messages))
         initMechanism()
@@ -46,7 +51,17 @@ class MainViewModel(
     }
 
     fun getTasks() {
-        feature.act(MainFeature.Action.GetTaskList)
+        updateJob?.cancel()
+        updateJob = viewModelScope.launch {
+            while (true) {
+                feature.act(MainFeature.Action.GetTaskList)
+                delay(15000L)
+            }
+        }
+    }
+
+    fun getTasksForce() {
+        feature.act(MainFeature.Action.GetTaskListForce)
     }
 
     override fun logout() {
@@ -62,7 +77,11 @@ class MainViewModel(
     }
 
     fun stopTask(taskInfo: TaskInfo) {
-        feature.act(MainFeature.Action.StopTask(taskInfo.id))
+        feature.act(MainFeature.Action.StopTask(taskInfo))
+    }
+
+    fun stopWorkUpdate() {
+        updateJob?.cancel()
     }
 
     fun toAuthScreen() {

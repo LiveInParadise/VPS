@@ -24,7 +24,14 @@ data class MainState(
                 copy(mechanismTypeClass = action.mechanismType) to setOf()
             }
             is MainFeature.Action.GetTaskList -> {
-                copy(isLoading = true) to setOf(MainFeature.Effect.GetTaskList)
+                if (taskItems.none { it.isActive() }) {
+                    copy(isLoading = true) to setOf(MainFeature.Effect.GetTaskList)
+                } else {
+                    copy() to setOf()
+                }
+            }
+            is MainFeature.Action.GetTaskListForce -> {
+                copy() to setOf(MainFeature.Effect.GetTaskList)
             }
             is MainFeature.Action.GetTaskListComplete -> {
                 copy(isLoading = false, taskItems = action.items) to setOf()
@@ -38,20 +45,32 @@ data class MainState(
             }
 
             is MainFeature.Action.StartTask -> {
-                val request = StartTaskRequest(Date().toRequestFormat())
-                copy() to setOf(MainFeature.Effect.StartSimpleTask(action.taskId, request))
+                if (taskItems.none { it.isActive() }) {
+                    val request = StartTaskRequest(Date().toRequestFormat())
+                    copy() to setOf(MainFeature.Effect.StartSimpleTask(action.taskId, request))
+                } else {
+                    copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartSecondTaskError))
+                }
             }
             is MainFeature.Action.StartTaskComplete -> {
                 taskItems.firstOrNull { it.id == action.taskId }?.let {
-                    copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartSimpleTaskComplete(action.message, it)))
+                    if (mechanismTypeClass == MechanismTypeClass.SIMPLE) {
+                        copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartSimpleTaskComplete(action.message, it)))
+                    } else {
+                        copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartCombinedTaskComplete(action.message)))
+                    }
                 } ?: run {
                     copy() to setOf()
                 }
             }
 
             is MainFeature.Action.StopTask -> {
-                val request = StopTaskRequest(Date().toRequestFormat())
-                copy() to setOf(MainFeature.Effect.StopCombinedTask(action.taskId, request))
+                if (action.taskInfo.isDelegated() && action.taskInfo.unloadingPlaceId == null) {
+                    copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StopTaskWithoutUnloadingPlaceError))
+                } else {
+                    val request = StopTaskRequest(Date().toRequestFormat())
+                    copy() to setOf(MainFeature.Effect.StopCombinedTask(action.taskInfo.id, request))
+                }
             }
             is MainFeature.Action.StopTaskComplete -> {
                 copy(isLoading = true) to setOf(MainFeature.Effect.GetTaskList)
