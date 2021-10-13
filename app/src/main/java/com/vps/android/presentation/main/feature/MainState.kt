@@ -23,6 +23,10 @@ data class MainState(
             is MainFeature.Action.InitMechanism -> {
                 copy(mechanismTypeClass = action.mechanismType) to setOf()
             }
+            is MainFeature.Action.SendTotalDistance -> {
+                copy() to setOf(MainFeature.Effect.SendTotalDistance)
+            }
+
             is MainFeature.Action.GetTaskList -> {
                 if (taskItems.none { it.isActive() }) {
                     copy(isLoading = true) to setOf(MainFeature.Effect.GetTaskList)
@@ -38,7 +42,11 @@ data class MainState(
             }
 
             is MainFeature.Action.StartMechanismService -> {
-                copy() to setOf(MainFeature.Effect.StartMechanismService)
+                if (taskItems.none { it.isActive() }) {
+                    copy() to setOf(MainFeature.Effect.StartMechanismService)
+                }else{
+                    copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartServiceWithActiveTaskError))
+                }
             }
             is MainFeature.Action.StartMechanismServiceComplete -> {
                 copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartMechanismServiceComplete(action.message)))
@@ -77,7 +85,11 @@ data class MainState(
             }
 
             is MainFeature.Action.Logout -> {
-                copy() to setOf(MainFeature.Effect.Logout)
+                if (taskItems.none { it.isActive() }) {
+                    copy() to setOf(MainFeature.Effect.Logout)
+                } else {
+                    copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.LogoutWithActiveTaskError))
+                }
             }
             is MainFeature.Action.LogoutComplete -> {
                 copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.Logout))

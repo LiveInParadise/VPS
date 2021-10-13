@@ -14,6 +14,8 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Action {
         data class InitMechanism(val mechanismType: MechanismTypeClass) : Action()
 
+        object SendTotalDistance : Action()
+
         object GetTaskList : Action()
         object GetTaskListForce : Action()
         data class GetTaskListComplete(val items: List<TaskInfo>) : Action()
@@ -36,6 +38,8 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Effect {
         object Logout : Effect()
 
+        object SendTotalDistance : Effect()
+
         object GetTaskList : Effect()
         object StartMechanismService : Effect()
         data class StartSimpleTask(val taskId: Int, val request: StartTaskRequest) : Effect()
@@ -48,8 +52,11 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
 
     sealed class Event {
         object Logout : Event()
+        object LogoutWithActiveTaskError : Event()
 
         data class StartMechanismServiceComplete(val message: String) : Event()
+        object StartServiceWithActiveTaskError : Event()
+
         data class StartSimpleTaskComplete(val message: String, val taskInfo: TaskInfo) : Event()
         data class StartCombinedTaskComplete(val message: String) : Event()
 

@@ -1,6 +1,12 @@
 package com.vps.android.presentation.auth
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import com.vps.android.R
@@ -14,6 +20,7 @@ import com.vps.android.presentation.auth.feature.AuthFeature
 import com.vps.android.presentation.auth.feature.AuthState
 import com.vps.android.presentation.base.BaseFragment
 import com.vps.android.presentation.base.IViewModelState
+import com.vps.android.presentation.base.PermissionsResult
 import com.vps.android.presentation.base.StateBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -26,6 +33,8 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
     override val viewModel: AuthViewModel by viewModel()
 
     override val stateBinding by lazy { AuthBinding() }
+
+    private var locationManager: LocationManager? = null
 
     private val pref: PrefManager by inject()
     private val pinLength by lazy { resources.getInteger(R.integer.pin_length) }
@@ -41,11 +50,14 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
     }
 
     override fun setupViews() {
+        locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         with(binding) {
             otpView.isClickable = false
             otpView.isFocusable = false
             otpView.setOtpCompletionListener {
-                viewModel.login(it)
+//                viewModel.requestPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+                viewModel.requestPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION))
             }
 
             keypad.onKeypadClicked = {
@@ -87,6 +99,54 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
             isInvisible = !showError
             text = errorMessage ?: getString(R.string.auth_code_error)
         }
+        if (showError) binding.otpView.text?.clear()
+    }
+
+    override fun onPermissionsResult(result: PermissionsResult) {
+        val permissionList = result.permissions.keys.toList()
+        when {
+            result.allGranted -> checkGPSAndGo()
+            !result.canRequestAgain -> openSettings(
+                getString(R.string.permissions_settings_message),
+                getString(R.string.permissions_settings_action)
+            )
+            else -> {
+                val notif = Notify.Error(
+                    getString(R.string.permissions_settings_message),
+                    getString(R.string.permissions_retry)
+                ) {
+                    viewModel.requestPermissions(permissionList)
+                }
+                viewModel.notify(notif)
+            }
+        }
+    }
+
+    private fun checkGPSAndGo() {
+        if (locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
+            buildAlertMessageNoGps(requireActivity(), 0)
+            return
+        }
+
+        binding.otpView.text?.let { viewModel.login(it.toString()) }
+    }
+
+    override fun handleResultSettings(result: ActivityResult) {
+        viewModel.requestPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+    }
+
+    override fun handleGPSResultSettings(result: ActivityResult) {
+        checkGPSAndGo()
+    }
+
+    private fun buildAlertMessageNoGps(activity: Activity, requestCode: Int) {
+        AlertDialog.Builder(activity)
+            .setMessage(R.string.map_gps_disabled)
+            .setCancelable(false)
+            .setPositiveButton(R.string.yes) { _, _ ->
+                openGpsSettings()
+            }
+            .show()
     }
 
     inner class AuthBinding : StateBinding() {

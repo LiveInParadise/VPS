@@ -98,9 +98,7 @@ class MechanismTypeFragment : BaseFragment<MechanismTypeViewModel>(R.layout.frag
         if (isLoading) {
             binding.recyclerView.visible(false)
             binding.noItems.visible(false)
-        }
-
-        if (list.isNotEmpty()) {
+        } else if (list.isNotEmpty()) {
             binding.noItems.visible(false)
             binding.recyclerView.visible(true)
             adapter.items = list

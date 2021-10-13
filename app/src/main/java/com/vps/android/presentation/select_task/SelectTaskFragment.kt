@@ -197,9 +197,7 @@ class SelectTaskFragment : BaseFragment<SelectTaskViewModel>(R.layout.fragment_s
         if (isLoading) {
             binding.recyclerView.visible(false)
             binding.noItems.visible(false)
-        }
-
-        if (taskTechList.isNotEmpty()) {
+        } else if (taskTechList.isNotEmpty()) {
             binding.noItems.visible(false)
             binding.recyclerView.visible(true)
 

@@ -24,4 +24,7 @@ class MechanismInteractor(
 
     suspend fun stopMechanismService() =
         repository.stopMechanismService()
+
+    suspend fun sendTotalDistance(distance: Double) =
+        repository.sendTotalDistance(distance)
 }

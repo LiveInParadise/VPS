@@ -10,6 +10,7 @@ import com.vps.android.domain.mechanism.MechanismItem
 import com.vps.android.domain.mechanism.MechanismType
 import com.vps.android.interactors.mechanism.api.MechanismApi
 import com.vps.android.interactors.mechanism.request.MechanismSelectRequest
+import com.vps.android.interactors.mechanism.request.TotalDistanceRequest
 
 class MechanismRepositoryImpl(
     dispatchersProvider: DispatchersProvider,
@@ -48,5 +49,11 @@ class MechanismRepositoryImpl(
     override suspend fun stopMechanismService(): RequestResult<String> =
         call {
             api.stopMechanismService()
+        }
+
+    override suspend fun sendTotalDistance(distance: Double): RequestResult<String> =
+        call {
+            val request = TotalDistanceRequest(distance)
+            api.sendTotalDistance(request)
         }
 }

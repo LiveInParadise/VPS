@@ -17,4 +17,6 @@ interface MechanismRepository {
     suspend fun startMechanismService(): RequestResult<String>
 
     suspend fun stopMechanismService(): RequestResult<String>
+
+    suspend fun sendTotalDistance(distance: Double): RequestResult<String>
 }

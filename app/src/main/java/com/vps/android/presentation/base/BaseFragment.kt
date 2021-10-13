@@ -1,8 +1,12 @@
 package com.vps.android.presentation.base
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
@@ -16,10 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.vps.android.R
 import com.vps.android.core.ext.hideKeyboard
+import com.vps.android.core.utils.Notify
 import com.vps.android.presentation.root.MainActivity
 
 abstract class BaseFragment<T : BaseViewModel>(
-    @LayoutRes private val contentLayoutId: Int
+    @LayoutRes private val contentLayoutId: Int,
 ) : Fragment(contentLayoutId) {
 
     open val stateBinding: StateBinding? = null
@@ -33,6 +38,8 @@ abstract class BaseFragment<T : BaseViewModel>(
         get() = activity as MainActivity
 
     lateinit var permissionsLauncher: ActivityResultLauncher<Array<out String>>
+    lateinit var settingsLauncher: ActivityResultLauncher<Intent>
+    lateinit var gpsLauncher: ActivityResultLauncher<Intent>
 
     abstract fun setupViews()
     abstract fun initObservers()
@@ -42,6 +49,12 @@ abstract class BaseFragment<T : BaseViewModel>(
 
         permissionsLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(), ::handleResultPermissions
+        )
+        settingsLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(), ::handleResultSettings
+        )
+        gpsLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(), ::handleGPSResultSettings
         )
 
         viewModel.observeNotifications(viewLifecycleOwner) { root.renderNotification(it) }
@@ -113,5 +126,24 @@ abstract class BaseFragment<T : BaseViewModel>(
     }
 
     open fun onPermissionsResult(result: PermissionsResult) {}
+
+    protected fun openSettings(message: String, actionLabel: String) {
+        context ?: return
+        val errHandler = {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.parse("package:${requireContext().packageName}")
+            }
+            settingsLauncher.launch(intent)
+        }
+        viewModel.notify(Notify.Error(message, actionLabel, errHandler))
+    }
+
+    protected fun openGpsSettings() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        gpsLauncher.launch(intent)
+    }
+
+    open fun handleResultSettings(result: ActivityResult) {}
+    open fun handleGPSResultSettings(result: ActivityResult) {}
 
 }

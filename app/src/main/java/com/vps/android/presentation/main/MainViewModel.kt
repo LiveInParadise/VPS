@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import com.vps.android.MainNavigationDirections
 import com.vps.android.core.local.PrefManager
+import com.vps.android.core.utils.CoordinatesHolder
+import com.vps.android.core.utils.LocationCheckType
 import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.domain.task.TaskInfo
 import com.vps.android.domain.task.TaskTypeClass
@@ -27,6 +29,7 @@ class MainViewModel(
     private val taskInteractor: TaskInteractor,
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
+    private val coordinateHolder: CoordinatesHolder,
     val prefManager: PrefManager,
 ) : BaseViewModel() {
 
@@ -38,11 +41,26 @@ class MainViewModel(
     val events: Flow<MainFeature.Event> = _events.receiveAsFlow()
 
     private var updateJob: Job? = null
+    private var fullTrackingDistanceJob: Job? = null
 
     init {
-        feature.init(viewModelScope, MainEffectHandler(taskInteractor, mechanismInteractor, authInteractor, _events, _messages))
+        feature.init(viewModelScope, MainEffectHandler(taskInteractor, mechanismInteractor, authInteractor, coordinateHolder, _events, _messages))
         initMechanism()
+        startTrackingMechanism()
         getTasks()
+    }
+
+    private fun startTrackingMechanism() {
+        if (prefManager.userMechanismType?.getType() == MechanismTypeClass.COMBINED) {
+            sendFullDistanceEvent(LocationCheckType.StartFullDistance)
+            fullTrackingDistanceJob?.cancel()
+            fullTrackingDistanceJob = viewModelScope.launch {
+                while (true) {
+                    delay(60_000L)
+                    feature.act(MainFeature.Action.SendTotalDistance)
+                }
+            }
+        }
     }
 
     private fun initMechanism() {
@@ -55,7 +73,7 @@ class MainViewModel(
         updateJob = viewModelScope.launch {
             while (true) {
                 feature.act(MainFeature.Action.GetTaskList)
-                delay(15000L)
+                delay(15_000L)
             }
         }
     }

@@ -2,7 +2,7 @@ package com.vps.android.core.ext
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.vps.android.core.utils.Event
+import com.vps.android.presentation.base.Event
 
 /**
  * Post [Event] with state to main thread

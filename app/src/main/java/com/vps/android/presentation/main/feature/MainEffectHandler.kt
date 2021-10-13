@@ -1,6 +1,7 @@
 package com.vps.android.presentation.main.feature
 
 import com.vps.android.core.network.base.RequestResult
+import com.vps.android.core.utils.CoordinatesHolder
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.interactors.task.TaskInteractor
@@ -13,6 +14,7 @@ class MainEffectHandler(
     private val taskInteractor: TaskInteractor,
     private val mechanismInteractor: MechanismInteractor,
     private val authInteractor: AuthInteractor,
+    private val coordinateHolder: CoordinatesHolder,
     private val events: Channel<MainFeature.Event>,
     private val messages: Channel<String>,
 ) : EffHandler<MainFeature.Effect, MainFeature.Action> {
@@ -22,19 +24,6 @@ class MainEffectHandler(
         commit: (MainFeature.Action) -> Unit,
     ) {
         when (effect) {
-            is MainFeature.Effect.StartMechanismService -> {
-                withContext(Dispatchers.IO) {
-                    val result = mechanismInteractor.startMechanismService()
-                    when (result) {
-                        is RequestResult.Success -> {
-                            commit(MainFeature.Action.StartMechanismServiceComplete(result.data))
-                        }
-                        else -> {
-                            commit(MainFeature.Action.Error(Throwable(result.toString())))
-                        }
-                    }
-                }
-            }
             is MainFeature.Effect.GetTaskList -> {
                 withContext(Dispatchers.IO) {
                     val result = taskInteractor.getTaskList()
@@ -79,6 +68,29 @@ class MainEffectHandler(
                         else -> {
                             commit(MainFeature.Action.Error(Throwable(result.toString())))
                         }
+                    }
+                }
+            }
+
+            is MainFeature.Effect.StartMechanismService -> {
+                withContext(Dispatchers.IO) {
+                    val result = mechanismInteractor.startMechanismService()
+                    when (result) {
+                        is RequestResult.Success -> {
+                            commit(MainFeature.Action.StartMechanismServiceComplete(result.data))
+                        }
+                        else -> {
+                            commit(MainFeature.Action.Error(Throwable(result.toString())))
+                        }
+                    }
+                }
+            }
+
+            is MainFeature.Effect.SendTotalDistance -> {
+                withContext(Dispatchers.IO) {
+                    val result = mechanismInteractor.sendTotalDistance(coordinateHolder.getFullMechanismDistance())
+                    if (result is RequestResult.Success) {
+                        coordinateHolder.clearFullDistanceTrackData()
                     }
                 }
             }

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.vps.android.R
+import com.vps.android.core.utils.LocationCheckType
 import com.vps.android.core.utils.Notify
 
 abstract class BaseActivity<T : BaseViewModel> : AppCompatActivity() {
@@ -24,6 +25,9 @@ abstract class BaseActivity<T : BaseViewModel> : AppCompatActivity() {
     abstract fun subscribeOnState(state: IViewModelState)
 
     abstract fun renderNotification(notify: Notify)
+
+    abstract fun subscribeOnFullDistance(checkType: LocationCheckType)
+    abstract fun subscribeOnTaskDistance(checkType: LocationCheckType)
 
     override fun setContentView(view: View?) {
         super.setContentView(view)
@@ -39,6 +43,7 @@ abstract class BaseActivity<T : BaseViewModel> : AppCompatActivity() {
         viewModel.observeNotifications(this) { renderNotification(it) }
         viewModel.observeNavigation(this) { subscribeOnNavigation(it) }
         viewModel.observePermissions(this) { subscribeOnRequestedPermissions(it) }
+        viewModel.observeLocationListener(this, { subscribeOnFullDistance(it) }, { subscribeOnTaskDistance(it) })
 
         navController = findNavController(R.id.nav_host_fragment_activity_main)
     }

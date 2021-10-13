@@ -2,14 +2,11 @@
     <string name="app_name">VPS</string>
     <string name="logo_name">VPS</string>
 
-    <!-- Error -->
-    <string name="error_api_default">Ошибка сервера</string>
-    <string name="error_api_break_date">Проверьте данные!</string>
-    <string name="error_api_token_error">Ошибка токена</string>
-    <string name="error_no_network">Отсутствует подключение к интернету</string>
-    <string name="hint_access_to_network">Поехали, есть подключение к интернету</string>
-    <string name="error_login_or_password">Неправильный логин или пароль.\nПопробуйте ещё раз.</string>
-    <string name="error_unknown">Что-то пошло не так.\nОбратитесь к разработчику приложения.</string>
+    <!-- Permissions -->
+    <string name="permissions_settings_message">Tolimesniam darbui reikalingi leidimai</string>
+    <string name="permissions_settings_action">Nustatymai</string>
+    <string name="permissions_retry">Kartoti</string>
+    <string name="map_gps_disabled">GPS išjungtas, ar norite jį įjungti?</string>
 
     <!-- Common -->
     <string name="no_items">No items</string>
@@ -18,8 +15,8 @@
     <string name="logout_message">Ar tikrai norite atsijungti?</string>
 
     <!-- Auth -->
-    <string name="auth_code_error">Permission denied or pin incorrect</string>
-    <string name="auth_success">Successfully log in</string>
+    <string name="auth_code_error">PIN kodas neteisingas, arba įrenginys neautorizuotas</string>
+    <string name="auth_success">Sėkmingai prisijungta prie sistemos</string>
     <string name="key_1">1</string>
     <string name="key_2">2</string>
     <string name="key_3">3</string>
@@ -35,8 +32,9 @@
     <string name="dialog_service_message">Ar mechanizmas tikrai sugedęs?</string>
     <string name="main_no_tasks">Užduočių nėra.</string>
     <string name="main_item_mechanism">Mechanizmai</string>
-    <string name="main_item_start_send_task_error">You cannot start task with active one</string>
-    <string name="main_item_stop_task_without_unloading_place">You cannot stop task without unloading place</string>
+    <string name="main_item_start_send_task_error">Negalite pradėti naujos užduoties, neužbaigę senos</string>
+    <string name="main_item_stop_task_without_unloading_place">Būtina nurodyti iškrovimo vietą</string>
+    <string name="main_item_logout_with_active_task_error">Prieš atsijungiant, užduotis turi būti uždaryta</string>
 
     <!-- Service -->
     <string name="service_title">Mechanizmas sugedęs</string>
@@ -49,7 +47,7 @@
     <string name="create_task_good_label">Krovinys</string>
     <string name="create_task_tech_label">Technika</string>
     <string name="create_task_create_button">Sukurti</string>
-    <string name="create_task_fill_error">Please fill all needed fields</string>
+    <string name="create_task_fill_error">Prašome užpildyti visus reikiamus laukus</string>
 
     <!-- Select Task -->
     <string name="select_task_save_button">Išsaugoti</string>

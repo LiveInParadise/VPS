@@ -2,6 +2,7 @@ package com.vps.android.interactors.mechanism.api
 
 import com.vps.android.core.network.base.BaseResponseObj
 import com.vps.android.interactors.mechanism.request.MechanismSelectRequest
+import com.vps.android.interactors.mechanism.request.TotalDistanceRequest
 import com.vps.android.interactors.mechanism.response.MechanismObj
 import com.vps.android.interactors.mechanism.response.MechanismSelectResponse
 import com.vps.android.interactors.mechanism.response.MechanismTypeObj
@@ -23,7 +24,7 @@ interface MechanismApi {
      **/
     @GET("/api/mechanism/list")
     suspend fun getMechanismListByType(
-        @Query("mechanism_type_id") typeId: Int
+        @Query("mechanism_type_id") typeId: Int,
     ): List<MechanismObj>
 
     /**
@@ -51,4 +52,12 @@ interface MechanismApi {
      **/
     @POST("/api/mechanism/service_stop")
     suspend fun stopMechanismService(): BaseResponseObj<String>
+
+    /**
+     * Send combined distance
+     **/
+    @POST("/api/mechanism/total_distance")
+    suspend fun sendTotalDistance(
+        @Body request: TotalDistanceRequest,
+    ): BaseResponseObj<String>
 }

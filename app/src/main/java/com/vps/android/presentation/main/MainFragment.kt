@@ -27,6 +27,7 @@ import com.vps.android.presentation.task.AddTaskFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.*
 
 class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
 
@@ -92,10 +93,16 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
             is MainFeature.Event.Logout -> {
                 viewModel.toAuthScreen()
             }
+            is MainFeature.Event.LogoutWithActiveTaskError -> {
+                viewModel.notify(Notify.Text(getString(R.string.main_item_logout_with_active_task_error)))
+            }
             is MainFeature.Event.StartMechanismServiceComplete -> {
                 viewModel.notify(Notify.Text(event.message))
                 viewModel.stopWorkUpdate()
                 viewModel.openServiceScreen()
+            }
+            is MainFeature.Event.StartServiceWithActiveTaskError -> {
+                viewModel.notify(Notify.Text(getString(R.string.main_item_logout_with_active_task_error)))
             }
             is MainFeature.Event.StartSimpleTaskComplete -> {
                 viewModel.notify(Notify.Text(event.message))
@@ -156,9 +163,7 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
         if (isLoading) {
             binding.recyclerView.visible(false)
             binding.noItems.visible(false)
-        }
-
-        if (taskItems.isNotEmpty()) {
+        } else if (taskItems.isNotEmpty()) {
             binding.noItems.visible(false)
             binding.recyclerView.visible(true)
             adapter.setItems(taskItems) {
