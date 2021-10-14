@@ -45,6 +45,7 @@ class AddTaskFeature : BaseFeature<AddTaskState, AddTaskFeature.Action, AddTaskF
 
     sealed class Event {
         object Logout : Event()
+        object LogoutWithActiveTaskError : Event()
 
         object ShowNotFillError : Event()
 

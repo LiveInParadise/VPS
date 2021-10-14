@@ -3,7 +3,6 @@ package com.vps.android.presentation.main.feature
 import com.vps.android.domain.mechanism.MechanismTypeClass
 import com.vps.android.domain.task.TaskInfo
 import com.vps.android.interactors.task.request.StartTaskRequest
-import com.vps.android.interactors.task.request.StopTaskRequest
 import com.vps.android.presentation.base.BaseFeature
 
 class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effect>() {
@@ -14,7 +13,7 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Action {
         data class InitMechanism(val mechanismType: MechanismTypeClass) : Action()
 
-        object SendTotalDistance : Action()
+        data class SendTotalDistance(val action: Action? = null) : Action()
 
         object GetTaskList : Action()
         object GetTaskListForce : Action()
@@ -38,13 +37,13 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Effect {
         object Logout : Effect()
 
-        object SendTotalDistance : Effect()
+        data class SendTotalDistance(val action: Action? = null) : Effect()
 
         object GetTaskList : Effect()
         object StartMechanismService : Effect()
         data class StartSimpleTask(val taskId: Int, val request: StartTaskRequest) : Effect()
 
-        data class StopCombinedTask(val taskId: Int, val request: StopTaskRequest) : Effect()
+        data class StopCombinedTask(val taskId: Int, val endTime: String) : Effect()
 
         data class DispatchEvent(val event: Event) : Effect()
         data class DispatchMessage(val message: String) : Effect()
@@ -53,6 +52,8 @@ class MainFeature : BaseFeature<MainState, MainFeature.Action, MainFeature.Effec
     sealed class Event {
         object Logout : Event()
         object LogoutWithActiveTaskError : Event()
+
+        object StartTrackingDistance : Event()
 
         data class StartMechanismServiceComplete(val message: String) : Event()
         object StartServiceWithActiveTaskError : Event()

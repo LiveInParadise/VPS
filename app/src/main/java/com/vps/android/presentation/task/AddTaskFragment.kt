@@ -100,6 +100,9 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
             is AddTaskFeature.Event.Logout -> {
                 viewModel.toAuthScreen()
             }
+            is AddTaskFeature.Event.LogoutWithActiveTaskError -> {
+                viewModel.notify(Notify.Text(getString(R.string.main_item_logout_with_active_task_error)))
+            }
             is AddTaskFeature.Event.ShowNotFillError -> {
                 viewModel.notify(Notify.Text(getString(R.string.create_task_fill_error)))
             }

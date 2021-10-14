@@ -46,21 +46,32 @@ class MainViewModel(
     init {
         feature.init(viewModelScope, MainEffectHandler(taskInteractor, mechanismInteractor, authInteractor, coordinateHolder, _events, _messages))
         initMechanism()
-        startTrackingMechanism()
         getTasks()
     }
 
-    private fun startTrackingMechanism() {
-        if (prefManager.userMechanismType?.getType() == MechanismTypeClass.COMBINED) {
-            sendFullDistanceEvent(LocationCheckType.StartFullDistance)
-            fullTrackingDistanceJob?.cancel()
-            fullTrackingDistanceJob = viewModelScope.launch {
-                while (true) {
-                    delay(60_000L)
-                    feature.act(MainFeature.Action.SendTotalDistance)
-                }
+    fun startTrackingDistance() {
+        sendFullDistanceEvent(LocationCheckType.StartFullDistance)
+        fullTrackingDistanceJob?.cancel()
+        fullTrackingDistanceJob = viewModelScope.launch {
+            while (true) {
+                delay(60_000L)
+                feature.act(MainFeature.Action.SendTotalDistance())
             }
         }
+    }
+
+    private fun stopTrackingDistance(action: MainFeature.Action) {
+        if (prefManager.userMechanismType?.getType() == MechanismTypeClass.COMBINED) {
+            fullTrackingDistanceJob?.cancel()
+            sendFullDistanceEvent(LocationCheckType.StopFullDistance)
+            feature.act(MainFeature.Action.SendTotalDistance(action))
+        } else {
+            feature.act(action)
+        }
+    }
+
+    fun startTrackingTaskDistance() {
+        sendTaskDistanceEvent(LocationCheckType.StartTaskDistance)
     }
 
     private fun initMechanism() {
@@ -83,11 +94,11 @@ class MainViewModel(
     }
 
     override fun logout() {
-        feature.act(MainFeature.Action.Logout)
+        stopTrackingDistance(MainFeature.Action.Logout)
     }
 
     fun startMechanismService() {
-        feature.act(MainFeature.Action.StartMechanismService)
+        stopTrackingDistance(MainFeature.Action.StartMechanismService)
     }
 
     fun startWorkTask(taskInfo: TaskInfo) {

@@ -1,14 +1,17 @@
 package com.vps.android.presentation.main.feature
 
+import com.vps.android.core.ext.toRequestFormat
 import com.vps.android.core.network.base.RequestResult
 import com.vps.android.core.utils.CoordinatesHolder
 import com.vps.android.interactors.auth.AuthInteractor
 import com.vps.android.interactors.mechanism.MechanismInteractor
 import com.vps.android.interactors.task.TaskInteractor
+import com.vps.android.interactors.task.request.StopTaskRequest
 import com.vps.android.presentation.base.EffHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class MainEffectHandler(
     private val taskInteractor: TaskInteractor,
@@ -46,9 +49,11 @@ class MainEffectHandler(
 
             is MainFeature.Effect.StopCombinedTask -> {
                 withContext(Dispatchers.IO) {
-                    val result = taskInteractor.stopTask(effect.taskId, effect.request)
+                    val request = StopTaskRequest(Date().toRequestFormat(), coordinateHolder.getTaskMechanismDistance())
+                    val result = taskInteractor.stopTask(effect.taskId, request)
                     when (result) {
                         is RequestResult.Success -> {
+                            coordinateHolder.clearTaskDistanceTrackData()
                             commit(MainFeature.Action.StopTaskComplete(result.data))
                         }
                         else -> {
@@ -60,6 +65,7 @@ class MainEffectHandler(
 
             is MainFeature.Effect.Logout -> {
                 withContext(Dispatchers.IO) {
+
                     val result = authInteractor.logout()
                     when (result) {
                         is RequestResult.Success -> {
@@ -92,6 +98,7 @@ class MainEffectHandler(
                     if (result is RequestResult.Success) {
                         coordinateHolder.clearFullDistanceTrackData()
                     }
+                    effect.action?.let { commit(it) }
                 }
             }
 

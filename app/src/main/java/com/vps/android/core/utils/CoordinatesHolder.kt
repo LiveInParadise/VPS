@@ -1,7 +1,6 @@
 package com.vps.android.core.utils
 
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.vps.android.presentation.base.Event
@@ -28,7 +27,6 @@ class CoordinatesHolder {
         }
 
         lastFullDistanceCoordinate = newLocation
-        Log.d("MyLogs", "Full Distance - ${fullDistance}")
     }
 
     fun addTaskDistanceCoordinate(newLocation: Location) {
@@ -47,8 +45,8 @@ class CoordinatesHolder {
         _taskDistanceTrackingLive.value = Event(command)
     }
 
-    fun getFullMechanismDistance() = fullDistance
-    fun getTaskMechanismDistance() = taskDistance
+    fun getFullMechanismDistance() = fullDistance / 1000
+    fun getTaskMechanismDistance() = taskDistance / 1000
 
     fun clearFullDistanceTrackData() {
         fullDistance = 0.0

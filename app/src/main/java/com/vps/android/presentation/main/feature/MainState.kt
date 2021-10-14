@@ -21,10 +21,15 @@ data class MainState(
     override suspend fun reduce(action: MainFeature.Action): Pair<MainState, Set<MainFeature.Effect>> =
         when (action) {
             is MainFeature.Action.InitMechanism -> {
-                copy(mechanismTypeClass = action.mechanismType) to setOf()
+                val effs = if (action.mechanismType == MechanismTypeClass.COMBINED) {
+                    setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartTrackingDistance))
+                } else {
+                    setOf()
+                }
+                copy(mechanismTypeClass = action.mechanismType) to effs
             }
             is MainFeature.Action.SendTotalDistance -> {
-                copy() to setOf(MainFeature.Effect.SendTotalDistance)
+                copy() to setOf(MainFeature.Effect.SendTotalDistance(action.action))
             }
 
             is MainFeature.Action.GetTaskList -> {
@@ -44,7 +49,7 @@ data class MainState(
             is MainFeature.Action.StartMechanismService -> {
                 if (taskItems.none { it.isActive() }) {
                     copy() to setOf(MainFeature.Effect.StartMechanismService)
-                }else{
+                } else {
                     copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StartServiceWithActiveTaskError))
                 }
             }
@@ -76,8 +81,7 @@ data class MainState(
                 if (action.taskInfo.isDelegated() && action.taskInfo.unloadingPlaceId == null) {
                     copy() to setOf(MainFeature.Effect.DispatchEvent(MainFeature.Event.StopTaskWithoutUnloadingPlaceError))
                 } else {
-                    val request = StopTaskRequest(Date().toRequestFormat())
-                    copy() to setOf(MainFeature.Effect.StopCombinedTask(action.taskInfo.id, request))
+                    copy() to setOf(MainFeature.Effect.StopCombinedTask(action.taskInfo.id, Date().toRequestFormat()))
                 }
             }
             is MainFeature.Action.StopTaskComplete -> {

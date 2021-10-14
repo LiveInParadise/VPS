@@ -44,7 +44,14 @@ data class AddTaskState(
             }
 
             is AddTaskFeature.Action.Logout -> {
-                copy() to setOf(AddTaskFeature.Effect.Logout)
+                when (taskTypeClass) {
+                    TaskTypeClass.SIMPLE_EDIT_ACTIVE, TaskTypeClass.COMBINED_EDIT_ACTIVE -> {
+                        copy() to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.LogoutWithActiveTaskError))
+                    }
+                    else -> {
+                        copy() to setOf(AddTaskFeature.Effect.Logout)
+                    }
+                }
             }
             is AddTaskFeature.Action.LogoutComplete -> {
                 copy() to setOf(AddTaskFeature.Effect.DispatchEvent(AddTaskFeature.Event.Logout))

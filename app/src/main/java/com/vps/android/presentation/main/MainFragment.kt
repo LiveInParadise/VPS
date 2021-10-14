@@ -90,6 +90,9 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
 
     private fun handleEvent(event: MainFeature.Event) {
         when (event) {
+            is MainFeature.Event.StartTrackingDistance -> {
+                viewModel.startTrackingDistance()
+            }
             is MainFeature.Event.Logout -> {
                 viewModel.toAuthScreen()
             }
@@ -111,6 +114,7 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
             is MainFeature.Event.StartCombinedTaskComplete -> {
                 viewModel.notify(Notify.Text(event.message))
                 viewModel.getTasks()
+                viewModel.startTrackingTaskDistance()
             }
             is MainFeature.Event.StartSecondTaskError -> {
                 viewModel.notify(Notify.Text(getString(R.string.main_item_start_send_task_error)))

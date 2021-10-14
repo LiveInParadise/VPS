@@ -49,6 +49,7 @@ class MainActivity : BaseActivity<MainVm>() {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest, locationCallback, Looper.myLooper())
+            Log.d("MyLogs", "Location started")
         } catch (unlikely: SecurityException) {
             Log.e("Locations", "Lost location permissions. Couldn't remove updates. $unlikely")
         }
@@ -111,6 +112,7 @@ class MainActivity : BaseActivity<MainVm>() {
 
     private fun stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        Log.d("MyLogs", "Location stopped")
     }
 
     override fun subscribeOnState(state: IViewModelState) {}
@@ -118,6 +120,7 @@ class MainActivity : BaseActivity<MainVm>() {
     private var locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
+            Log.d("MyLogs", "Location - ${locationResult}")
             if (saveFullDistance) {
                 viewModel.sendFullDistanceCoordinate(locationResult.lastLocation)
             }
