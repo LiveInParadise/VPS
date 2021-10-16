@@ -12,6 +12,7 @@
     <color name="red">#FF0000</color>
     <color name="dark_blue">#2A3E4C</color>
     <color name="green">#54a663</color>
+    <color name="orange">#f7ba43</color>
 
     <color name="base_color">#A0B9BD</color>
     <color name="service_color">#FFB400</color>

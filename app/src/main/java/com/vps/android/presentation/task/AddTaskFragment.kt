@@ -123,11 +123,9 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
     private fun renderMechanismType(mechanismType: MechanismTypeClass) {
         when (mechanismType) {
             MechanismTypeClass.SIMPLE -> {
-                binding.containerTaskUnloading.visible(false)
                 binding.containerTaskTech.visible(true)
             }
             MechanismTypeClass.COMBINED -> {
-                binding.containerTaskUnloading.visible(true)
                 binding.containerTaskTech.visible(false)
             }
         }
@@ -138,22 +136,26 @@ class AddTaskFragment : BaseFragment<AddTaskViewModel>(R.layout.fragment_add_tas
             TaskTypeClass.SIMPLE_EDIT_NOT_ACTIVE, TaskTypeClass.SIMPLE_NEW -> {
                 binding.containerTaskType.isClickable = true
                 binding.containerTaskLoading.isClickable = true
+                binding.containerTaskUnloading.isClickable = true
                 binding.containerTaskGood.isClickable = true
                 binding.containerTaskTech.isClickable = true
 
                 binding.ivArrowType.visible(true)
                 binding.ivArrowLoading.visible(true)
+                binding.ivArrowUnloading.visible(true)
                 binding.ivArrowGood.visible(true)
                 binding.ivArrowTech.visible(true)
             }
             TaskTypeClass.SIMPLE_EDIT_ACTIVE -> {
                 binding.containerTaskType.isClickable = false
                 binding.containerTaskLoading.isClickable = false
+                binding.containerTaskUnloading.isClickable = false
                 binding.containerTaskGood.isClickable = false
                 binding.containerTaskTech.isClickable = true
 
                 binding.ivArrowType.visible(false)
                 binding.ivArrowLoading.visible(false)
+                binding.ivArrowUnloading.visible(false)
                 binding.ivArrowGood.visible(false)
                 binding.ivArrowTech.visible(true)
             }
