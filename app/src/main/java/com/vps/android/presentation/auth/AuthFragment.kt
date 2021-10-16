@@ -56,7 +56,6 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
             otpView.isClickable = false
             otpView.isFocusable = false
             otpView.setOtpCompletionListener {
-//                viewModel.requestPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
                 viewModel.requestPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION))
             }
 
