@@ -69,6 +69,7 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
                 otpView.setText(otpView.text?.dropLast(1) ?: "")
             }
 
+            androidId.visible(pref.showDeviceId)
             androidId.text = pref.deviceId
         }
     }
@@ -87,6 +88,7 @@ class AuthFragment : BaseFragment<AuthViewModel>(R.layout.fragment_auth) {
     private fun handleEvent(event: AuthFeature.Event) {
         when (event) {
             is AuthFeature.Event.AuthSuccess -> {
+                pref.showDeviceId = false
                 viewModel.notify(Notify.Text(requireContext().getString(R.string.auth_success)))
                 viewModel.navigateToSettings()
             }

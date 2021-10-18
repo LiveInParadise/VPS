@@ -68,11 +68,10 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
         binding.btnStop.setSafeOnClickListener {
             viewModel.stopTask()
         }
-
-        startTimer()
     }
 
     private fun startTimer() {
+        timerTask?.cancel()
         timerTask = Timer().schedule(1000, 1000) {
             val currentTime = Date().time
             val dif = currentTime - startTime
@@ -151,6 +150,11 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
         } else {
             binding.tvError.visible(false, hide = true)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startTimer()
     }
 
     override fun onStop() {

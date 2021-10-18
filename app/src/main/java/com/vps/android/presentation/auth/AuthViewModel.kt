@@ -29,7 +29,6 @@ class AuthViewModel(
         feature.init(viewModelScope, AuthEffectHandler(authInteractor, _events, _messages))
     }
 
-
     fun login(pinCode: String) {
         feature.act(AuthFeature.Action.Auth(pinCode))
     }

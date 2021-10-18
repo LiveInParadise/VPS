@@ -13,7 +13,7 @@ class PrefDelegate<T>(private val defaultValue: T) {
 
     operator fun provideDelegate(
         thisRef: PrefManager,
-        prop: KProperty<*>
+        prop: KProperty<*>,
     ): ReadWriteProperty<PrefManager, T> {
         val key = prop.name
 
@@ -30,10 +30,7 @@ class PrefDelegate<T>(private val defaultValue: T) {
                         is Long -> thisRef.preferences.getLong(key, defaultValue as Long) as T
                         is Float -> thisRef.preferences.getFloat(key, defaultValue as Float) as T
                         is String -> thisRef.preferences.getString(key, defaultValue as String) as T
-                        is Boolean -> thisRef.preferences.getBoolean(
-                            key,
-                            defaultValue as Boolean
-                        ) as T
+                        is Boolean -> thisRef.preferences.getBoolean(key, defaultValue as Boolean) as T
                         else -> error("This type can not be stored into Preferences")
                     }
                 }
@@ -64,7 +61,7 @@ class PrefObjDelegate<T>(
     private val gson: Gson,
     private val type: Type = object : TypeToken<T>() {}.type,
     private val key: String? = null,
-    private val defaultValue: T? = null
+    private val defaultValue: T? = null,
 ) : ReadWriteProperty<Any, T?> {
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T? {
