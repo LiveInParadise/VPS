@@ -22,8 +22,7 @@ class PrefManager(
 
     var token by PrefDelegate("")
 
-//    var deviceId by PrefDelegate(getUniqueDeviceId())
-    var deviceId by PrefDelegate("a4a9498asd498asd489")
+    var deviceId by PrefDelegate(getUniqueDeviceId())
     var showDeviceId by PrefDelegate(true)
 
     var userMechanismType: MechanismType? by PrefObjDelegate(preferences, gson, MechanismType::class.java, defaultValue = null)
