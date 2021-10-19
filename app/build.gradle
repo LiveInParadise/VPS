@@ -28,6 +28,9 @@ android {
         debug {
             debuggable true
         }
+        notDebug {
+            debuggable false
+        }
     }
 
     flavorDimensions "api"
