@@ -27,4 +27,12 @@ object SimpleWorkAdapterDelegates {
             }
         }
     }
+
+    fun clearSelection() {
+        selectedId = -1
+    }
+
+    fun setSelection(mechanismId: Int) {
+        selectedId = mechanismId
+    }
 }

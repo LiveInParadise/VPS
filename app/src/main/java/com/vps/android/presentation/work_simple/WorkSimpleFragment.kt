@@ -106,12 +106,13 @@ class WorkSimpleFragment : BaseFragment<WorkSimpleViewModel>(R.layout.fragment_w
     private fun handleEvent(event: WorkSimpleFeature.Event) {
         when (event) {
             is WorkSimpleFeature.Event.StopTaskComplete -> {
+                SimpleWorkAdapterDelegates.clearSelection()
                 viewModel.notify(Notify.Text(event.message))
                 viewModel.toMainScreen()
             }
             is WorkSimpleFeature.Event.SelectMechanismSuccess -> {
                 viewModel.notify(Notify.Text(event.message))
-                SimpleWorkAdapterDelegates.selectedId = event.mechanismId
+                SimpleWorkAdapterDelegates.setSelection(event.mechanismId)
                 adapter.notifyDataSetChanged()
             }
             is WorkSimpleFeature.Event.Error -> {
