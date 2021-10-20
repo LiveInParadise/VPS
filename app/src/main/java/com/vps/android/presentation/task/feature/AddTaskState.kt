@@ -76,7 +76,7 @@ data class AddTaskState(
             is AddTaskFeature.Action.CheckAndProcessTask -> {
                 val isCorrect = when (mechanismType) {
                     MechanismTypeClass.SIMPLE -> {
-                        taskType != null && loadingPlace != null && goodItem != null
+                        taskType != null && loadingPlace != null
                     }
                     MechanismTypeClass.COMBINED -> {
                         taskType != null

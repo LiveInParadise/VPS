@@ -22,6 +22,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_mechanism"
+            style="@style/ToolbarUserDataStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="80dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_logo"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/btn_service"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Belaz Nr.2     30t" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            style="@style/ToolbarUserDataStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_add_task"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/tv_logo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Belaz Nr.2     30t" />
+
         <ImageView
             android:id="@+id/btn_logout"
             style="@style/ClickableBorderlessBackgroundStyle"

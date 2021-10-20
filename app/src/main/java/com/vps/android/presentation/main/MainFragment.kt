@@ -48,6 +48,10 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
     }
 
     override fun setupViews() {
+        viewModel.prefManager.userMechanism?.let { item ->
+            binding.tvMechanism.text = item.name
+        }
+
         binding.recyclerView.apply {
             addItemDecoration(MainHorizontalSpaceItemDecoration(resources.getDimension(R.dimen.default_margin_double).toInt()))
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)

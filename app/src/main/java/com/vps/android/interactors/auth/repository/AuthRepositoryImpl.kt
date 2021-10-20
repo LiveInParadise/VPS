@@ -20,7 +20,7 @@ class AuthRepositoryImpl(
 
     override suspend fun login(pinCode: String): RequestResult<TokenObj> =
         call {
-            val request = PinAuthRequest(pin = pinCode.toIntOrNull() ?: 0, device_id = pref.deviceId)
+            val request = PinAuthRequest(pin = pinCode.toIntOrNull() ?: 0, device_id = "a4a9498asd498asd489")
             api.login(request)
         }.let { response ->
             if (response is RequestResult.Success) {
