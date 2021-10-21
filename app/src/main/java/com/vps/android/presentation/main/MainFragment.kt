@@ -50,6 +50,7 @@ class MainFragment : BaseFragment<MainViewModel>(R.layout.fragment_main) {
     override fun setupViews() {
         viewModel.prefManager.userMechanism?.let { item ->
             binding.tvMechanism.text = item.name
+            binding.tvUserName.text = item.workerName
         }
 
         binding.recyclerView.apply {

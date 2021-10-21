@@ -9,6 +9,7 @@ data class MechanismItem(
     val id: Int,
     val name: String,
     val workerId: Int?,
+    val workerName: String?,
     val loadingGoods: Int,
     val inService: Int,
     val mechanismTypeId: Int,
